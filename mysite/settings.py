@@ -1,13 +1,19 @@
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
+# SECURITY
 SECRET_KEY = 'django-insecure-^x!&e3a$-7(eq2q*g$undvc((6bsx8r)mmvk&(#xp4nn$ri^9#'
-DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost'] # Geliştirme için eklendi
+DEBUG = True  # Üretimde False yap
+
+# Railway deploy için
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'web-production-4e82f.up.railway.app'
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -22,6 +28,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Railway için ekledik
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -43,7 +50,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media', 
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -78,8 +85,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
-    BASE_DIR / "blog/static",
+    BASE_DIR / "blog" / "static",
 ]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'
@@ -88,10 +96,10 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# --- ÖZEL AYARLAR ---
+# Özel ayarlar
 LOGIN_REDIRECT_URL = 'ana_sayfa'
 LOGOUT_REDIRECT_URL = 'ana_sayfa'
 LOGIN_URL = 'login'
 
 # YouTube Kanal Adresin
-YOUTUBE_URL = "https://www.youtube.com/@pythontürkçeakademi"
+YOUTUBE_URL = "https://www.youtube.com/@pythonturkceakademi"
