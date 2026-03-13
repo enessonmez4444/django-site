@@ -1,0 +1,242 @@
+body{
+    background-image: url("/static/blog/images/python_bg.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    margin:0;
+    padding:0;
+}
+
+.navbar {
+    height: 70px; /* Net bir yükseklik ver */
+    display: flex;
+    align-items: center; /* İçindekileri dikeyde ortalar */
+    overflow: hidden; /* Dışarı taşan bir şey olursa navbar'ı büyütmez */
+}
+
+.nav-container{
+    width:90%;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo a{
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.nav-menu{
+    display:flex;
+    list-style:none;
+    gap:20px;
+}
+
+.nav-menu a{
+    color:white;
+    text-decoration:none;
+    font-size:15px;
+    position: relative;
+    padding-left:25px; /* ikon için boşluk */
+}
+
+/* Navbar ikonları */
+.nav-menu a.home::before {
+    content: "\1F3E0"; /* 🏠 */
+    position: absolute;
+    left:0;
+}
+
+.nav-menu a.dersler::before {
+    content: "\1F4D6"; /* 📖 */
+    position: absolute;
+    left:0;
+}
+
+.nav-menu a.uygulamalar::before {
+    content: "\1F4BB"; /* 💻 */
+    position: absolute;
+    left:0;
+}
+
+.nav-menu a.video::before {
+    content: "\1F3AC"; /* 🎬 */
+    position: absolute;
+    left:0;
+}
+
+.nav-menu a.kod::before {
+    content: "\1F4DA"; /* 📚 */
+    position: absolute;
+    left:0;
+}
+
+.nav-menu a.projeler::before {
+    content: "\1F3AF"; /* 🎯 */
+    position: absolute;
+    left:0;
+}
+
+.nav-menu a.ai::before {
+    content: "\1F916"; /* 🤖 */
+    position: absolute;
+    left:0;
+}
+
+.nav-menu a:hover{
+    color:#1b1a17;
+}
+
+.nav-buttons a{
+    text-decoration:none;
+    padding:6px 12px;
+    margin-left:8px;
+    border-radius:5px;
+}
+
+.login{
+    border:1px solid white;
+    color:white;
+}
+
+.register{
+    background:#ffc107;
+    color:black;
+}
+
+.form-container{
+    max-width:400px;
+    margin:50px auto;
+    padding:30px;
+    background:rgba(255,255,255,0.85);
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+    text-align:center;
+}
+
+.form-container input{
+    width:90%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+
+.form-container button{
+    padding:10px 20px;
+    border:none;
+    border-radius:5px;
+    background:#ffc107;
+    color:black;
+    cursor:pointer;
+}
+
+.anasayfa-container {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.anasayfa-buttons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-main {
+    padding: 15px 30px;
+    background: #ffc107;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.btn-main:hover {
+    background: #e0a800;
+    color: white;
+}
+
+.python-sidebar {
+    width: 330px;
+    background: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif; 
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    background: #1a202c;
+    color: #ffffff;
+    padding: 24px 15px;
+    text-align: center;
+    border-bottom: 4px solid #04AA6D;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-weight: 800;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.lesson-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.lesson-link {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    text-decoration: none;
+    border-bottom: 1px solid #edf2f7;
+    transition: all 0.2s ease-in-out;
+}
+
+.lesson-link:last-child {
+    border-bottom: none;
+}
+
+.lesson-badge {
+    background-color: #04AA6D;
+    color: white;
+    font-weight: 900;
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    min-width: 60px;
+    text-align: center;
+    margin-right: 18px;
+    flex-shrink: 0;
+}
+
+.lesson-title {
+    color: #000000 !important;
+    font-weight: 800 !important;
+    font-size: 16px;
+    line-height: 1.4;
+    display: block;
+}
+
+.lesson-link:hover {
+    background-color: #f7fafc;
+}
+
+.lesson-link:hover .lesson-badge {
+    background-color: #038d5a;
+}
+
+.lesson-link.active {
+    background-color: #f0fff4;
+    border-left: 6px solid #04AA6D;
+}

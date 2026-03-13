@@ -103,3 +103,4 @@ LOGIN_URL = 'login'
 
 # YouTube Kanal Adresin
 YOUTUBE_URL = "https://www.youtube.com/@pythonturkceakademi"
+
