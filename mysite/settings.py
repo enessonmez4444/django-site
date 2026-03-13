@@ -9,11 +9,7 @@ SECRET_KEY = 'django-insecure-^x!&e3a$-7(eq2q*g$undvc((6bsx8r)mmvk&(#xp4nn$ri^9#
 DEBUG = True  # Üretimde False yap
 
 # Railway deploy için
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'web-production-4e82f.up.railway.app'
-]
+ALLOWED_HOSTS = ['pythonturkce.up.railway.app']
 
 # Application definition
 INSTALLED_APPS = [
