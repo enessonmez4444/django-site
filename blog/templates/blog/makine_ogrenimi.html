@@ -1,0 +1,132 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}ML Engine Pro | Predictive Analytics{% endblock %}
+
+{% block content %}
+<div class="ml-pro-modern">
+    <div class="container-fluid py-5 d-flex justify-content-center align-items-start">
+        <div class="ml-pro-grid">
+
+            <!-- SOL PANEL: Veri Seti -->
+            <div class="panel panel-left p-4">
+                <div class="header mb-4">
+                    <h2 class="fw-bold">📊 Veri Seti Yönetimi</h2>
+                    <p class="text-muted small">X ve Y değerlerinizi girin, model öğrenecek.</p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <input type="number" step="any" name="x_value" class="form-control" placeholder="X Girdi" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="number" step="any" name="y_value" class="form-control" placeholder="Y Hedef" required>
+                        </div>
+                        <div class="col-12 d-grid">
+                            <button type="submit" name="veri_ekle" class="btn btn-dark fw-bold">
+                                + Veri Ekle
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="data-preview mt-3">
+                    <h6 class="fw-bold text-muted mb-2">Mevcut Veriler ({{ kullanici_veri|length }})</h6>
+                    <div class="data-list">
+                        {% for x, y in kullanici_veri %}
+                            <div class="data-item">
+                                <span class="x-val">X: {{ x }}</span>
+                                <span class="arrow">→</span>
+                                <span class="y-val">Y: {{ y }}</span>
+                            </div>
+                        {% empty %}
+                            <div class="text-center text-muted fst-italic py-3">Henüz veri yok.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- SAĞ PANEL: Tahminleme -->
+            <div class="panel panel-right p-4">
+                <div class="header mb-4">
+                    <h2 class="fw-bold">⚡ Tahminleme Motoru</h2>
+                    <p class="text-muted small">Algoritmayı seçin ve iki yeni X için tahmin alın.</p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <select name="model" class="form-select form-select-lg">
+                            <option value="dogrusal">Lineer Regresyon</option>
+                            <option value="karar_agaci">Karar Ağaçları</option>
+                            <option value="random_forest">Random Forest</option>
+                            <option value="knn">K-Nearest Neighbors</option>
+                            <option value="gradient_boost">Gradient Boost</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <input type="number" step="any" name="tahmin_x" class="form-control" placeholder="Tahmin için 1. X" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="number" step="any" name="tahmin_x2" class="form-control" placeholder="Tahmin için 2. X" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary fw-bold">
+                            Başlat ⚡
+                        </button>
+                    </div>
+                </form>
+
+                {% if sonuc %}
+                <div class="results mt-4">
+                    <div class="result-card card-tahmin1">
+                        <h4>📈 Tahmin 1</h4>
+                        <p class="fw-bold display-5">{{ sonuc.0 }}</p>
+                        <span class="badge bg-light text-dark">{{ model_adi }}</span>
+                    </div>
+                    <div class="result-card card-tahmin2">
+                        <h4>📈 Tahmin 2</h4>
+                        <p class="fw-bold display-5">{{ sonuc.1 }}</p>
+                        <span class="badge bg-light text-dark">{{ model_adi }}</span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+    .ml-pro-modern { font-family: 'Inter', sans-serif; min-height: 100vh; background: #f0f9ff; }
+    .ml-pro-grid { display: flex; flex-direction: column; gap: 30px; width: 95%; max-width: 1400px; }
+
+    @media(min-width: 992px) { .ml-pro-grid { flex-direction: row; } }
+
+    .panel { flex: 1; background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+
+    .header h2 { font-weight: 800; margin-bottom: 0.5rem; }
+    .header p { margin-bottom: 1rem; color: #64748b; }
+
+    .form-control { border-radius: 12px; border: 1px solid #cbd5e1; padding: 0.75rem 1rem; font-size: 1rem; }
+    .form-select { border-radius: 12px; }
+
+    .btn-dark { border-radius: 12px; background: #1e293b; color: white; font-weight: 700; padding: 0.75rem; }
+    .btn-primary { border-radius: 12px; background: #2563eb; color: white; font-weight: 700; padding: 0.75rem; }
+
+    .data-list { max-height: 300px; overflow-y: auto; padding-right: 5px; }
+    .data-item { display: flex; gap: 10px; padding: 10px; border-radius: 12px; background: #f0f9ff; margin-bottom: 8px; font-weight: 500; }
+    .data-item .arrow { color: #64748b; }
+
+    .results { display: flex; gap: 20px; flex-wrap: wrap; }
+    .result-card { flex: 1; min-width: 120px; padding: 20px; border-radius: 16px; color: white; text-align: center; font-weight: 700; }
+    .card-tahmin1 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .card-tahmin2 { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+    .result-card h4 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .result-card p { font-size: 2rem; margin-bottom: 0.5rem; }
+    .result-card .badge { font-weight: 600; font-size: 0.8rem; }
+</style>
+{% endblock %}

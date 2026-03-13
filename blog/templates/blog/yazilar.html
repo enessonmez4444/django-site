@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Yazılar{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Yazılar</h2>
+<div class="row">
+{% for yazi in yazilar %}
+  <div class="col-md-4 mb-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ yazi.baslik }}</h5>
+        <p class="card-text">{{ yazi.icerik }}</p>
+        <a href="#" class="btn btn-primary">Devamını Oku</a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}  

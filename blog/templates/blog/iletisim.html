@@ -1,0 +1,29 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}İletişim{% endblock %}
+
+{% block content %}
+<h2 style="text-align:center; margin:40px 0;">İletişim Formu</h2>
+
+<div style="max-width:600px; margin:0 auto;">
+    {% if messages %}
+        {% for message in messages %}
+            <div style="margin-bottom:10px; padding:10px; border-radius:5px; 
+                        background: {% if message.tags == 'success' %}#2ecc71{% else %}#e74c3c{% endif %}; 
+                        color:white;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" style="display:flex; flex-direction:column; gap:15px;">
+        {% csrf_token %}
+        <input type="text" name="isim" placeholder="İsminiz" required style="padding:10px; border-radius:5px; border:1px solid #ccc;">
+        <input type="email" name="email" placeholder="Email adresiniz" required style="padding:10px; border-radius:5px; border:1px solid #ccc;">
+        <textarea name="mesaj" placeholder="Mesajınız" required style="padding:10px; border-radius:5px; border:1px solid #ccc; min-height:120px;"></textarea>
+        <button type="submit" style="padding:10px; border:none; border-radius:5px; background:#2ecc71; color:white; cursor:pointer;">
+            Gönder
+        </button>
+    </form>
+</div>
+{% endblock %}

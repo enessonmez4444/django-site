@@ -1,0 +1,364 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Kod Kütüphanesi | 100 Python Kodu{% endblock %}
+
+{% block content %}
+<div id="lib-master-wrapper" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; text-align: left;">
+
+    <style>
+        /* Genel Ayarlar ve Hizalama */
+        #lib-master-wrapper * { box-sizing: border-box; }
+        
+        .lib-header-section { 
+            background: #1a202c; 
+            color: white; 
+            padding: 40px 20px; 
+            border-radius: 15px; 
+            text-align: center; 
+            margin-bottom: 30px; 
+            border-bottom: 6px solid #04AA6D;
+        }
+
+        /* Arama Çubuğu */
+        .search-area { margin-bottom: 25px; width: 100%; }
+        #searchField { 
+            width: 100%; 
+            padding: 15px 20px; 
+            border: 2px solid #cbd5e0; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            outline: none;
+            transition: 0.3s;
+        }
+        #searchField:focus { border-color: #04AA6D; box-shadow: 0 0 10px rgba(4, 170, 109, 0.2); }
+
+        /* Grid Sistemi */
+        .snippet-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); 
+            gap: 20px; 
+        }
+        @media (max-width: 768px) { .snippet-container { grid-template-columns: 1fr; } }
+
+        /* Kart Tasarımı */
+        .code-box { 
+            background: #ffffff; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .code-box-header { 
+            padding: 15px 20px; 
+            background: #edf2f7; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .code-box-header h3 { margin: 0; font-size: 15px; color: #2d3748; font-weight: 800; }
+
+        .code-box-content { display: none; padding: 0; background: #1a1a1a; }
+        .code-box-description { padding: 15px 20px; color: #cbd5e0; font-size: 13px; border-bottom: 1px solid #333; line-height: 1.5; background: #2d3748; }
+
+        pre { margin: 0; padding: 20px; color: #e2e8f0; font-family: 'Consolas', monospace; font-size: 13px; overflow-x: auto; line-height: 1.6; }
+        
+        /* Renklendirme */
+        .k { color: #c678dd; } .f { color: #61afef; } .s { color: #98c379; } .n { color: #d19a66; } .c { color: #5c6370; }
+        .badge-lib { background: #04AA6D; color: white; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .badge-pro { background: #3182ce; }
+    </style>
+
+    <div class="lib-header-section">
+        <h1 style="margin:0;">🐍 Python Kod Ansiklopedisi</h1>
+        <p style="opacity: 0.8; margin-top: 10px;">Full Paket: 100 Snippet Tamamlandı</p>
+    </div>
+
+    <div class="search-area">
+        <input type="text" id="searchField" onkeyup="doSearch()" placeholder="100 kod arasında ara (Örn: Veri, Flask, Algoritma)...">
+    </div>
+
+    <div class="snippet-container" id="codeGrid">
+        
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>1. Fibonacci Dizisi Üretici</h3><span class="badge-lib">Algoritma</span></div><div class="code-box-content"><pre><span class="k">def</span> <span class="f">fib</span>(n): a, b = <span class="n">0</span>, <span class="n">1</span>...</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>2. Listeden Rastgele Seçim</h3><span class="badge-lib">Temel</span></div><div class="code-box-content"><pre><span class="k">import</span> random; secim = random.choice(liste)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>3. Metindeki Sesli Harfleri Say</h3><span class="badge-lib">String</span></div><div class="code-box-content"><pre>sesli = <span class="s">"aeıioöuü"</span>...</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>4. Dosya Boyutu Öğrenme</h3><span class="badge-lib">Sistem</span></div><div class="code-box-content"><pre><span class="k">import</span> os; boyut = os.path.getsize()</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>5. Sözlükte Anahtar Kontrolü</h3><span class="badge-lib">Sözlük</span></div><div class="code-box-content"><pre><span class="k">if</span> <span class="s">"ad"</span> <span class="k">in</span> d:</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>6. Metni Tersine Çevir</h3><span class="badge-lib">String</span></div><div class="code-box-content"><pre>ters = s[::-<span class="n">1</span>]</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>7. Listeyi Stringe Dönüştür</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre>metin = <span class="s">""</span>.join(l)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>8. İki Listeyi Karşılaştır</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre>ortak = <span class="f">set</span>(l1) & <span class="f">set</span>(l2)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>9. Basit Sayı Tahmin Algoritması</h3><span class="badge-lib">Algoritma</span></div><div class="code-box-content"><pre><span class="k">import</span> random; hedef = random.randint(<span class="n">1</span>, <span class="n">100</span>)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>10. En Büyük Ortak Bölen (EBOB)</h3><span class="badge-lib">Matematik</span></div><div class="code-box-content"><pre><span class="k">import</span> math; sonuc = math.gcd(<span class="n">48</span>, <span class="n">64</span>)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>11. Faktöriyel Hesaplama</h3><span class="badge-lib">Matematik</span></div><div class="code-box-content"><pre><span class="k">def</span> <span class="f">fakt</span>(n): <span class="k">return</span> <span class="n">1</span> <span class="k">if</span> n&lt;<span class="n">2</span> <span class="k">else</span> n*fakt(n-1)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>12. Listeleri Tek Satırda Filtreleme</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre>ciftler = [x <span class="k">for</span> x <span class="k">in</span> sayilar <span class="k">if</span> x % <span class="n">2</span> == <span class="n">0</span>]</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>13. İki Sözlüğü Birleştirme</h3><span class="badge-lib">Sözlük</span></div><div class="code-box-content"><pre>birlesik = {**d1, **d2}</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>14. JSON Metnini Sözlüğe Çevir</h3><span class="badge-lib">Veri</span></div><div class="code-box-content"><pre><span class="k">import</span> json; veri = json.loads(js)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>15. Palindrome Kontrolü</h3><span class="badge-lib">Algoritma</span></div><div class="code-box-content"><pre>durum = kelime == kelime[::-<span class="n">1</span>]</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>16. Rastgele Şifre Oluşturucu</h3><span class="badge-lib">Güvenlik</span></div><div class="code-box-content"><pre><span class="k">import</span> string; sifre = <span class="s">""</span>.join(...)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>17. Metin Dosyasına Veri Kaydetme</h3><span class="badge-lib">Dosya</span></div><div class="code-box-content"><pre><span class="k">with</span> <span class="f">open</span>(<span class="s">"n.txt"</span>, <span class="s">"w"</span>) <span class="k">as</span> f: f.write()</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>18. Eleman Frekansı (Counter)</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre><span class="k">from</span> collections <span class="k">import</span> Counter; c = Counter(l)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>19. Kodun Çalışma Süresini Ölçme</h3><span class="badge-lib">Sistem</span></div><div class="code-box-content"><pre><span class="k">import</span> time; basla = time.time()</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>20. Email Format Kontrolü (Regex)</h3><span class="badge-lib">String</span></div><div class="code-box-content"><pre><span class="k">import</span> re; re.match(<span class="s">r'...'</span>, email)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>21. Listeyi N'lik Gruplara Ayırma</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre>[l[i:i+n] <span class="k">for</span> i <span class="k">in</span> <span class="f">range</span>(<span class="n">0</span>, <span class="f">len</span>(l), n)]</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>22. Map Kullanımı</h3><span class="badge-lib">Temel</span></div><div class="code-box-content"><pre><span class="f">list</span>(<span class="f">map</span>(<span class="k">lambda</span> x: x**<span class="n">2</span>, sayilar))</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>23. Dosya Uzantısını Ayıklama</h3><span class="badge-lib">Sistem</span></div><div class="code-box-content"><pre><span class="k">import</span> os; os.path.splitext(<span class="s">"f.jpg"</span>)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>24. Sayının Palindrome Durumu</h3><span class="badge-lib">Matematik</span></div><div class="code-box-content"><pre><span class="f">str</span>(n) == <span class="f">str</span>(n)[::-<span class="n">1</span>]</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>25. Anagram Kontrolü</h3><span class="badge-lib">Algoritma</span></div><div class="code-box-content"><pre><span class="f">sorted</span>(s1) == <span class="f">sorted</span>(s2)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>26. Vücut Kitle İndeksi</h3><span class="badge-lib">Matematik</span></div><div class="code-box-content"><pre>vki = kilo / (boy**<span class="n">2</span>)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>27. Mevcut Çalışma Dizini</h3><span class="badge-lib">Sistem</span></div><div class="code-box-content"><pre><span class="k">import</span> os; os.getcwd()</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>28. Lambda Toplama</h3><span class="badge-lib">Temel</span></div><div class="code-box-content"><pre>topla = <span class="k">lambda</span> a, b : a + b</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>29. Tekrar Edenleri Temizle</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre>temiz = <span class="f">list</span>(<span class="f">set</span>(l))</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>30. Hata Yakalama (Try)</h3><span class="badge-lib">Temel</span></div><div class="code-box-content"><pre><span class="k">try</span>: ... <span class="k">except</span> Exception: ...</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>31. Enumerate Kullanımı</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre><span class="k">for</span> i, v <span class="k">in</span> <span class="f">enumerate</span>(liste):</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>32. All/Any Kontrolü</h3><span class="badge-lib">Temel</span></div><div class="code-box-content"><pre>hepsi = <span class="f">all</span>([<span class="n">True</span>, <span class="n">True</span>])</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>33. Kelime Baş Harf Büyüt</h3><span class="badge-lib">String</span></div><div class="code-box-content"><pre>sonuc = metin.title()</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>34. Listeyi Tersine Çevirme</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre>l.reverse()</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>35. Sözlük Sıralama</h3><span class="badge-lib">Sözlük</span></div><div class="code-box-content"><pre><span class="f">sorted</span>(d.items(), key=<span class="k">lambda</span> x: x[<span class="n">1</span>])</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>36. Listenin Ortalaması</h3><span class="badge-lib">Matematik</span></div><div class="code-box-content"><pre>ort = <span class="f">sum</span>(l) / <span class="f">len</span>(l)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>37. Listeden Eleman Silme</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre>l.remove(deger)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>38. String Split</h3><span class="badge-lib">String</span></div><div class="code-box-content"><pre>liste = s.split(<span class="s">","</span>)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>39. Listenin Max/Min Elemanı</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre>eb = <span class="f">max</span>(l); ek = <span class="f">min</span>(l)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>40. Bilgisayardan Dosya Silme</h3><span class="badge-lib">Sistem</span></div><div class="code-box-content"><pre><span class="k">import</span> os; os.remove(<span class="s">"f.txt"</span>)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>41. Güncel Tarih Saat</h3><span class="badge-lib">Sistem</span></div><div class="code-box-content"><pre><span class="k">import</span> datetime; simdi = datetime.datetime.now()</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>42. Metni Küçük Harf Yap</h3><span class="badge-lib">String</span></div><div class="code-box-content"><pre>sonuc = m.lower()</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>43. Eleman Listede mi?</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre><span class="k">if</span> x <span class="k">in</span> liste: <span class="f">print</span>(<span class="s">"Var"</span>)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>44. Sayı Dizisi (Range)</h3><span class="badge-lib">Temel</span></div><div class="code-box-content"><pre>sayilar = <span class="f">list</span>(<span class="f">range</span>(<span class="n">0</span>, <span class="n">10</span>))</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>45. Faktöriyel (Math)</h3><span class="badge-lib">Matematik</span></div><div class="code-box-content"><pre><span class="k">import</span> math; math.factorial(<span class="n">5</span>)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>46. Sözlük Anahtar Listesi</h3><span class="badge-lib">Sözlük</span></div><div class="code-box-content"><pre>anahtarlar = <span class="f">list</span>(d.keys())</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>47. Zip ile Sözlük Yapma</h3><span class="badge-lib">Sözlük</span></div><div class="code-box-content"><pre>d = <span class="f">dict</span>(<span class="f">zip</span>(keys, values))</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>48. Metin Değiştir (Replace)</h3><span class="badge-lib">String</span></div><div class="code-box-content"><pre>yeni = m.replace(<span class="s">"a"</span>, <span class="s">"b"</span>)</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>49. Listenin Kopyasını Alma</h3><span class="badge-lib">Liste</span></div><div class="code-box-content"><pre>yeni_liste = eski_liste.copy()</pre></div></div>
+        <div class="code-box"><div class="code-box-header" onclick="toggleSnippet(this)"><h3>50. Sayı Kontrolü (Isdigit)</h3><span class="badge-lib">String</span></div><div class="code-box-content"><pre>durum = s.isdigit()</pre></div></div>
+
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>51. Pandas: CSV Dosyası Okuma</h3><span class="badge-lib badge-pro">Veri Bilimi</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> pandas <span class="k">as</span> pd; df = pd.read_csv(<span class="s">'data.csv'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>52. Flask: Merhaba Dünya</h3><span class="badge-lib badge-pro">Web</span></div>
+            <div class="code-box-content"><pre><span class="k">from</span> flask <span class="k">import</span> Flask; app = Flask(__name__)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>53. Numpy: Ortalama Hesaplama</h3><span class="badge-lib badge-pro">Veri Bilimi</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> numpy <span class="k">as</span> np; np.mean([<span class="n">1, 2, 3</span>])</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>54. Requests: HTTP Get İsteği</h3><span class="badge-lib badge-pro">Web</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> requests; r = requests.get(<span class="s">'https://api.com'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>55. Matplotlib: Çizgi Grafik</h3><span class="badge-lib badge-pro">Görselleme</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> matplotlib.pyplot <span class="k">as</span> plt; plt.plot(x, y)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>56. Selenium: Driver Başlatma</h3><span class="badge-lib badge-pro">Otomasyon</span></div>
+            <div class="code-box-content"><pre><span class="k">from</span> selenium <span class="k">import</span> webdriver; d = webdriver.Chrome()</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>57. List Comprehension (İleri)</h3><span class="badge-lib">Temel</span></div>
+            <div class="code-box-content"><pre>m = [x**<span class="n">2</span> <span class="k">for</span> x <span class="k">in</span> <span class="f">range</span>(<span class="n">10</span>) <span class="k">if</span> x % <span class="n">2</span> == <span class="n">0</span>]</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>58. SQLite: Veritabanı Bağlantısı</h3><span class="badge-lib badge-pro">Veritabanı</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> sqlite3; db = sqlite3.connect(<span class="s">'app.db'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>59. BeautifulSoup: HTML Parse</h3><span class="badge-lib badge-pro">Scraping</span></div>
+            <div class="code-box-content"><pre><span class="k">from</span> bs4 <span class="k">import</span> BeautifulSoup; s = BeautifulSoup(html)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>60. Pillow: Resim Boyutlandırma</h3><span class="badge-lib badge-pro">Görsel</span></div>
+            <div class="code-box-content"><pre>img.resize((<span class="n">800, 600</span>))</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>61. Argparse: CLI Argümanları</h3><span class="badge-lib badge-pro">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> argparse; parser = argparse.ArgumentParser()</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>62. Itertools: Permütasyonlar</h3><span class="badge-lib">Algoritma</span></div>
+            <div class="code-box-content"><pre><span class="k">from</span> itertools <span class="k">import</span> permutations; <span class="f">list</span>(permutations(l))</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>63. Decorator (Süsleyici) Yapısı</h3><span class="badge-lib">İleri</span></div>
+            <div class="code-box-content"><pre><span class="k">def</span> <span class="f">dec</span>(f): <span class="k">def</span> <span class="f">w</span>(): <span class="f">print</span>(<span class="s">'X'</span>); f(); <span class="k">return</span> w</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>64. UUID: Benzersiz ID Üretme</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> uuid; unique_id = uuid.uuid4()</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>65. Pathlib: Modern Yol Yönetimi</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">from</span> pathlib <span class="k">import</span> Path; p = Path(<span class="s">'folder/file.txt'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>66. QR Kod Oluşturma</h3><span class="badge-lib badge-pro">Araçlar</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> qrcode; img = qrcode.make(<span class="s">'Merhaba'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>67. ZipFile: Dosya Zipleme</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> zipfile; z = zipfile.ZipFile(<span class="s">'a.zip'</span>, <span class="s">'w'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>68. Shutil: Dosya Kopyalama</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> shutil; shutil.copy(<span class="s">'a.txt'</span>, <span class="s">'b.txt'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>69. Logger: Log Kaydı Tutma</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> logging; logging.basicConfig(level=logging.INFO)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>70. Threading: Çoklu İş Parçacığı</h3><span class="badge-lib">İleri</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> threading; t = threading.Thread(target=f)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>71. Scipy: İntegral Hesaplama</h3><span class="badge-lib badge-pro">Matematik</span></div>
+            <div class="code-box-content"><pre><span class="k">from</span> scipy.integrate <span class="k">import</span> quad; quad(f, <span class="n">0</span>, <span class="n">1</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>72. Random: Şifre Karıştırma</h3><span class="badge-lib">Güvenlik</span></div>
+            <div class="code-box-content"><pre>random.shuffle(liste)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>73. Datetime: İki Tarih Farkı</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre>fark = tarih2 - tarih1</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>74. Base64: Veri Kodlama</h3><span class="badge-lib">Güvenlik</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> base64; b64 = base64.b64encode(data)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>75. Subprocess: Komut Çalıştır</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> subprocess; subprocess.run([<span class="s">'ls'</span>])</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>76. Collections: NamedTuple</h3><span class="badge-lib">İleri</span></div>
+            <div class="code-box-content"><pre>Nokta = namedtuple(<span class="s">'Nokta'</span>, [<span class="s">'x'</span>, <span class="s">'y'</span>])</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>77. Glob: Dosya Listeleme</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> glob; dosyalar = glob.glob(<span class="s">'*.txt'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>78. Pickle: Obje Kaydetme</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> pickle; pickle.dump(obj, f)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>79. Regular Expression: Sayı Bul</h3><span class="badge-lib">String</span></div>
+            <div class="code-box-content"><pre>re.findall(<span class="s">r'\d+'</span>, metin)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>80. SMTPLIB: E-posta Gönderimi</h3><span class="badge-lib">Web</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> smtplib; s = smtplib.SMTP(<span class="s">'smtp.gmail.com'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>81. Pandas: Filtreleme</h3><span class="badge-lib badge-pro">Veri Bilimi</span></div>
+            <div class="code-box-content"><pre>df[df[<span class="s">'yas'</span>] &gt; <span class="n">18</span>]</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>82. Math: Radyanı Dereceye Çevir</h3><span class="badge-lib">Matematik</span></div>
+            <div class="code-box-content"><pre>math.degrees(math.pi)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>83. Listeyi Sözlüğe Dönüştürme</h3><span class="badge-lib">Sözlük</span></div>
+            <div class="code-box-content"><pre>d = {k: v <span class="k">for</span> k, v <span class="k">in</span> enumerate(l)}</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>84. Statistics: Medyan Bulma</h3><span class="badge-lib">Matematik</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> statistics; statistics.median(liste)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>85. OS: Klasör Oluşturma</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre>os.makedirs(<span class="s">'yol/yeni_klasor'</span>, exist_ok=<span class="n">True</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>86. Time: Programı Uyut (Sleep)</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre>time.sleep(<span class="n">5</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>87. Inspect: Fonksiyon Kodunu Gör</h3><span class="badge-lib">İleri</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> inspect; inspect.getsource(func)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>88. Platform: Sistem Bilgisi</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> platform; platform.system()</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>89. Hashlib: MD5 Şifreleme</h3><span class="badge-lib">Güvenlik</span></div>
+            <div class="code-box-content"><pre>hashlib.md5(text.encode()).hexdigest()</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>90. Webbrowser: URL Aç</h3><span class="badge-lib">Araçlar</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> webbrowser; webbrowser.open(<span class="s">'google.com'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>91. Pandas: GroupBy Kullanımı</h3><span class="badge-lib badge-pro">Veri Bilimi</span></div>
+            <div class="code-box-content"><pre>df.groupby(<span class="s">'kategori'</span>).mean()</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>92. Counter: En Çok Geçen Eleman</h3><span class="badge-lib">Liste</span></div>
+            <div class="code-box-content"><pre>counter.most_common(<span class="n">1</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>93. Numpy: Matris Çarpımı</h3><span class="badge-lib badge-pro">Veri Bilimi</span></div>
+            <div class="code-box-content"><pre>np.dot(matris1, matris2)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>94. Itertools: Sonsuz Sayaç</h3><span class="badge-lib">Algoritma</span></div>
+            <div class="code-box-content"><pre><span class="k">from</span> itertools <span class="k">import</span> count; <span class="k">for</span> i <span class="k">in</span> count(<span class="n">10</span>):</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>95. Context Manager (With)</h3><span class="badge-lib">İleri</span></div>
+            <div class="code-box-content"><pre><span class="k">class</span> <span class="f">MyContext</span>: <span class="k">def</span> <span class="f">__enter__</span>(s): ...</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>96. PyPDF2: PDF Sayfa Sayısı</h3><span class="badge-lib badge-pro">Araçlar</span></div>
+            <div class="code-box-content"><pre>reader.numPages</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>97. Unittest: Basit Test</h3><span class="badge-lib">İleri</span></div>
+            <div class="code-box-content"><pre><span class="k">import</span> unittest; self.assertEqual(a, b)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>98. Flask: Dinamik Route</h3><span class="badge-lib badge-pro">Web</span></div>
+            <div class="code-box-content"><pre><span class="k">@app.route</span>(<span class="s">'/user/&lt;name&gt;'</span>)</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>99. Selenium: Tıklama İşlemi</h3><span class="badge-lib badge-pro">Otomasyon</span></div>
+            <div class="code-box-content"><pre>driver.find_element_by_id(<span class="s">'btn'</span>).click()</pre></div>
+        </div>
+        <div class="code-box">
+            <div class="code-box-header" onclick="toggleSnippet(this)"><h3>100. Sistem Kapatma (Komut)</h3><span class="badge-lib">Sistem</span></div>
+            <div class="code-box-content"><pre>os.system(<span class="s">"shutdown /s /t 1"</span>)</pre></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function toggleSnippet(header) {
+        const content = header.nextElementSibling;
+        content.style.display = (content.style.display === "block") ? "none" : "block";
+    }
+
+    function doSearch() {
+        let input = document.getElementById('searchField').value.toLowerCase();
+        let cards = document.getElementsByClassName('code-box');
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].querySelector("h3").innerText.toLowerCase();
+            let badge = cards[i].querySelector(".badge-lib").innerText.toLowerCase();
+            // Hem başlıkta hem de etikette arama yapar
+            if (title.includes(input) || badge.includes(input)) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>
+{% endblock %}

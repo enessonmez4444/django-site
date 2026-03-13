@@ -1,0 +1,121 @@
+{% extends 'blog/base.html' %}
+{% load custom_filters %}
+
+{% block title %}Veri Analizi - Tablo Yönetimi{% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<div style="max-width:1400px; margin:0 auto; padding:40px 20px; font-family: 'Inter', sans-serif; background-color: #f8fafc; min-height: 100vh;">
+
+    <div style="text-align:center; margin-bottom: 40px;">
+        <h1 style="font-size:2.5rem; color:#0f172a; margin-bottom:12px; font-weight: 800; letter-spacing: -0.025em;">📊 Veri Yönetim Paneli</h1>
+        <p style="color: #64748b; font-size: 1.1rem;">Verilerinizi yükleyin, akıllı filtrelerle analiz edin ve sonuçları anında kopyalayın.</p>
+    </div>
+
+    <div style="background: white; border-radius: 16px; padding: 25px; margin-bottom: 35px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <h3 style="color:#0f172a; margin-top:0; margin-bottom:15px; display:flex; align-items:center; gap:10px; font-size: 1.2rem;">
+            <span style="background:#4f46e5; color:white; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:50%; font-size:14px;">?</span>
+            Nasıl Kullanılır ve İpuçları
+        </h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+            <div style="background:#f8fafc; padding:15px; border-radius:12px; border:1px solid #f1f5f9;">
+                <strong style="color:#4f46e5; display:block; margin-bottom:5px;">🔍 Dinamik Filtreleme</strong>
+                <p style="margin:0; font-size:0.85rem; color:#475569; line-height: 1.5;">Tablo yüklendikten sonra her sütun altındaki kutucuğa yazarak anlık arama yapabilirsiniz.</p>
+            </div>
+            <div style="background:#f8fafc; padding:15px; border-radius:12px; border:1px solid #f1f5f9;">
+                <strong style="color:#10b981; display:block; margin-bottom:5px;">📋 Verileri Kopyala</strong>
+                <p style="margin:0; font-size:0.85rem; color:#475569; line-height: 1.5;">Görünen tabloyu tek tıkla kopyalayıp Excel veya Google Sayfalar'a yapıştırabilirsiniz.</p>
+            </div>
+            <div style="background:#f8fafc; padding:15px; border-radius:12px; border:1px solid #f1f5f9;">
+                <strong style="color:#ef4444; display:block; margin-bottom:5px;">🗑️ Veriyi Temizle</strong>
+                <p style="margin:0; font-size:0.85rem; color:#475569; line-height: 1.5;">Sayfadaki verileri tamamen sıfırlamak için "Temizle" butonunu kullanın.</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:25px; margin-bottom: 30px;">
+        <div style="background:white; padding:24px; border-radius:16px; border: 1px solid #e2e8f0;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+                <div style="background:#eff6ff; padding:10px; border-radius:10px; color:#2563eb;">📤</div>
+                <h3 style="margin:0; font-size:1.1rem; color:#1e293b;">Yeni Veri Yükle</h3>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'veri_analizi' %}" style="display:flex; flex-direction:column; gap:15px;">
+                {% csrf_token %}
+                <label style="border: 2px dashed #cbd5e1; border-radius:12px; padding:20px; text-align:center; cursor:pointer;">
+                    <input type="file" name="data_file" accept=".csv,.json,.xlsx" required style="display:none;" onchange="this.nextElementSibling.innerText = this.files[0].name">
+                    <span style="color:#64748b; font-size:0.9rem;">Dosya seçmek için tıklayın (.csv, .xlsx, .json)</span>
+                </label>
+                <button type="submit" style="background:#4f46e5; color:white; padding:12px; border:none; border-radius:10px; font-weight:700; cursor:pointer;">Yükle ve Çözümle</button>
+            </form>
+        </div>
+
+        <div style="background:white; padding:24px; border-radius:16px; border: 1px solid #e2e8f0;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+                <div style="background:#ecfdf5; padding:10px; border-radius:10px; color:#10b981;">📂</div>
+                <h3 style="margin:0; font-size:1.1rem; color:#1e293b;">Kayıtlı Veri Setleri</h3>
+            </div>
+            <form method="get" action="{% url 'veri_analizi' %}" style="display:flex; flex-direction:column; gap:15px;">
+                <select name="dataset" style="padding:12px; border-radius:10px; border:1px solid #e2e8f0; background:#f9fafb;">
+                    <option value="">Bir veri seti seçin...</option>
+                    {% for ds in veri_setleri %}
+                        <option value="{{ ds.id }}">{{ ds.isim }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" style="background:#10b981; color:white; padding:12px; border:none; border-radius:10px; font-weight:700; cursor:pointer;">Veriyi Aktar</button>
+            </form>
+        </div>
+    </div>
+
+    {% if veri_var_mi %}
+    <div style="background:white; border-radius:20px; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.04); margin-bottom:40px; overflow:hidden;">
+        <div style="background:#f8fafc; padding:20px 30px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; color:#0f172a; font-size:1.2rem;">🔍 Gelişmiş Filtreleme</h3>
+            <div style="display:flex; gap:10px;">
+                <a href="{% url 'veri_analizi' %}?temizle=1" style="text-decoration:none; color:#ef4444; padding:8px 16px; border-radius:8px; font-size:0.9rem; font-weight:600; border:1px solid #fee2e2;">🗑️ Veriyi Sıfırla</a>
+                <button onclick="copyTable()" style="background:#6366f1; color:white; padding:8px 16px; border:none; border-radius:8px; font-weight:600; cursor:pointer;">📋 Verileri Kopyala</button>
+            </div>
+        </div>
+        <div style="padding:30px;">
+            <form method="get" action="{% url 'veri_analizi' %}" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:20px;">
+                {% for col in veri.columns %}
+                <div>
+                    <label style="display:block; margin-bottom:8px; font-size:0.85rem; font-weight:700; color:#475569;">{{ col }}</label>
+                    <input type="text" name="{{ col }}" value="{{ filtreler_template|get_item:col|default:'' }}" placeholder="Ara..." style="width:100%; padding:10px; border-radius:10px; border:1px solid #e2e8f0;">
+                </div>
+                {% endfor %}
+                <div style="grid-column: 1 / -1; text-align: right; margin-top:20px;">
+                    <button type="submit" style="background:#0f172a; color:white; padding:12px 40px; border:none; border-radius:10px; font-weight:700; cursor:pointer;">Filtreleri Uygula</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div style="background:white; border-radius:20px; border: 1px solid #e2e8f0; padding:20px; overflow-x:auto;">
+        {{ tablo_html|safe }}
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+function copyTable() {
+    const table = document.querySelector(".table");
+    if (!table) return;
+    let range = document.createRange();
+    range.selectNode(table);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    alert('✅ Filtrelenmiş veriler kopyalandı!');
+    window.getSelection().removeAllRanges();
+}
+</script>
+
+<style>
+    .table { width: 100%; border-collapse: collapse; }
+    .table th { background: #f8fafc; color: #475569; padding: 16px; text-align: left; border-bottom: 2px solid #f1f5f9; white-space: nowrap; }
+    .table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; white-space: nowrap; }
+    .dataframe { border: none !important; width: 100% !important; }
+</style>
+{% endblock %}

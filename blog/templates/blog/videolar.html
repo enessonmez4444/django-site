@@ -1,0 +1,128 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Video Eğitimler{% endblock %}
+
+{% block content %}
+<div class="video-container">
+
+    <h2 class="video-title">Tüm Video Eğitimleri</h2>
+    <p class="video-desc">Python ve diğer konularda hazırlanan tüm video derslerimizi aşağıdan izleyebilirsiniz.</p>
+
+    <div class="video-grid">
+        {% for video in videolar %}
+        <div class="video-card" id="video-{{ video.id }}">
+            <div class="video-frame">
+                <iframe width="100%" height="200"
+                        src="{{ video.youtube_link }}"
+                        title="{{ video.baslik }}"
+                        frameborder="0"
+                        allowfullscreen
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            </div>
+            <div class="video-info">
+                <h3>{{ video.baslik }}</h3>
+                <p>{{ video.aciklama|default:"Açıklama yok." }}</p>
+                <a href="{{ video.youtube_link }}" target="_blank" class="btn-izle">YouTube'da İzle</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>Henüz video eklenmemiş.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+<style>
+.video-container{
+    max-width:1200px;
+    margin:auto;
+    padding:50px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.video-title{
+    text-align:center;
+    font-size:36px;
+    font-weight:bold;
+    margin-bottom:10px;
+    color:#2c3e50;
+}
+
+.video-desc{
+    text-align:center;
+    color:#7f8c8d;
+    margin-bottom:40px;
+    font-size:16px;
+}
+
+.video-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
+    gap:25px;
+}
+
+.video-card{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display:flex;
+    flex-direction:column;
+}
+
+.video-card:hover{
+    transform: translateY(-5px);
+    box-shadow:0 12px 25px rgba(0,0,0,0.15);
+}
+
+.video-frame iframe{
+    border:none;
+    border-bottom:1px solid #ecf0f1;
+    border-radius:12px 12px 0 0;
+}
+
+.video-info{
+    padding:15px 20px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+.video-info h3{
+    font-size:20px;
+    margin:10px 0 8px;
+    color:#34495e;
+}
+
+.video-info p{
+    font-size:14px;
+    color:#7f8c8d;
+    flex:1;
+}
+
+.btn-izle{
+    display:inline-block;
+    padding:8px 15px;
+    background:#2ecc71;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+    font-weight:500;
+    margin-top:10px;
+    text-align:center;
+    transition: background 0.3s;
+}
+
+.btn-izle:hover{
+    background:#27ae60;
+}
+
+@media(max-width:768px){
+    .video-frame iframe{
+        height:180px;
+    }
+}
+</style>
+
+{% endblock %}

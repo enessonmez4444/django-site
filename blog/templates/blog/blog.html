@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Blog | Python Geliştirme Günlüğü{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #2d3748; line-height: 1.8;">
+    
+    <h1 style="border-bottom: 3px solid #38a169; padding-bottom: 10px; color: #1a202c;">🚀 Python ile Orta Düzey Uygulama Geliştirme</h1>
+    <p style="font-size: 1.1em; color: #4a5568; margin-top: 20px;">
+        Yazılım öğrenme sürecinde teorik bilgilerden sıyrılıp "işe yarar" bir şeyler üretmek işin en heyecanlı kısmıdır. 
+        Bu blog yazısında, hazırladığım uygulama havuzunda hangi mantıkları kullandığımı ve neden bu projeleri seçtiğimi anlatacağım.
+    </p>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+    <h2 style="color: #2c5282;">🧩 Projelerin Temel Mantığı</h2>
+    <p>
+        Hazırladığım 7 farklı proje aslında rastgele seçilmedi. Her biri Python'un farklı bir kasını çalıştırmak için tasarlandı:
+    </p>
+
+    <ul style="list-style-type: none; padding: 0;">
+        <li style="background: #f7fafc; padding: 15px; border-left: 5px solid #4299e1; margin-bottom: 10px;">
+            <strong>Nesne Yönelimli Programlama (OOP):</strong> ATM ve Banka projelerinde <code>class</code> yapılarını kullanarak veriyi ve fonksiyonları tek bir çatı altında topladım.
+        </li>
+        <li style="background: #f0fff4; padding: 15px; border-left: 5px solid #48bb78; margin-bottom: 10px;">
+            <strong>Veri Saklama (JSON & File I/O):</strong> Uygulama kapandığında verilerin silinmemesi için <code>json</code> ve <code>txt</code> formatlarında dosya okuma/yazma işlemleri yaptım.
+        </li>
+        <li style="background: #fffaf0; padding: 15px; border-left: 5px solid #ed8936; margin-bottom: 10px;">
+            <strong>Algoritma & Şifreleme:</strong> Şifreli Not Defteri projelerimde XOR ve Sezar şifreleme mantıklarını kullanarak veriyi güvenli hale getirmeyi öğrendim.
+        </li>
+    </ul>
+
+    
+
+[Image of software development lifecycle diagram]
+
+
+    <h2 style="color: #2c5282; margin-top: 40px;">💡 Ne Öğrendim?</h2>
+    <p>
+        Bu projeleri geliştirirken sadece kod yazmayı değil, <strong>"Temiz Kod" (Clean Code)</strong> yazmanın önemini kavradım. 
+        Kodun sadece çalışması yetmez; bir başkası (veya 3 ay sonra kendim) baktığında ne yapıldığını anlamalıdır. 
+        Bu yüzden fonksiyon isimlerinden döngü yapılarına kadar her şeyi modüler tutmaya çalıştım.
+    </p>
+
+    <div style="background: #2d3748; color: white; padding: 25px; border-radius: 10px; margin-top: 50px; text-align: center;">
+        <h3 style="margin: 0;">👨‍💻 Yolculuk Devam Ediyor</h3>
+        <p style="margin-bottom: 0; opacity: 0.9;">
+            Bu sayfadaki projeler benim gelişimimin sadece bir parçası. Yakında veritabanı (SQL) ve web entegrasyonları ile projeleri daha profesyonel bir seviyeye taşıyacağım.
+        </p>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,339 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}{{ ders.baslik }}{% endblock %}
+
+{% block content %}
+<style>
+/* CSS AYNI - DOKUNULMADI */
+:root {
+    --w3-green: #04AA6D;
+    --w3-hover-gray: #e7e9eb;
+    --sidebar-width: 230px;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+.tutorial-container {
+    display: flex;
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: white;
+    width: 100%;
+}
+
+.tutorial-sidebar {
+    width: var(--sidebar-width); 
+    min-width: var(--sidebar-width);
+    background-color: #fff;
+    height: 100vh;
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    border-right: 1px solid #f1f1f1;
+    padding-top: 10px;
+    z-index: 10;
+}
+
+.sidebar-title {
+    padding: 14px 15px;
+    font-size: 14px; 
+    font-weight: 600;
+    color: #000;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+.sidebar-accordion { border: none; }
+
+.sidebar-accordion summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 6px 15px; 
+    font-size: 14px;  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+}
+
+.sidebar-accordion summary:hover { background-color: var(--w3-hover-gray); }
+
+.sidebar-accordion[open] summary {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+.sidebar-accordion summary::-webkit-details-marker { display: none; }
+
+.main-link {
+    display: block;
+    padding: 6px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+}
+
+.main-link:hover { background-color: var(--w3-hover-gray); }
+
+.sub-link {
+    display: block;
+    padding: 5px 15px 5px 25px; 
+    font-size: 13px;  
+    color: #000;
+    text-decoration: none;
+    transition: 0.1s;
+}
+
+.sub-link:hover { background-color: var(--w3-hover-gray); }
+
+.active-link {
+    background-color: var(--w3-green) !important;
+    color: white !important;
+}
+
+.side-tick { 
+    float: right; 
+    font-weight: bold; 
+    color: var(--w3-green); 
+    font-size: 11px; 
+}
+
+.active-link .side-tick { color: white; }
+
+/* Ana başlık açık olduğunda yeşil görünmesi */
+.summary-active {
+    background-color: var(--w3-green);
+    color: white;
+}
+
+.tutorial-content {
+    flex: 1;
+    padding: 20px 60px;
+    width: 100%;
+    max-width: 70%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.main-lesson-content, .sub-content {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    color: #000;
+}
+
+.main-title {
+    font-size: 24px !important;
+    font-weight: 600;
+    margin: 10px 0;
+}
+
+.sub-header {
+    font-size: 14px !important;
+    font-weight: 600;
+}
+
+.main-link, .sidebar-accordion summary {
+    font-size: 12px !important; 
+}
+
+.sub-link {
+    font-size: 10px !important;
+}
+
+.content-section { display: none; }
+.content-section.active { display: block; }
+
+@media (max-width: 768px) {
+    .tutorial-container { flex-direction: column; }
+    .tutorial-sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #eee; }
+    .tutorial-content { padding: 20px; }
+}
+</style>
+
+<div class="tutorial-container">
+
+<nav class="tutorial-sidebar">
+<div class="sidebar-title">Python Tutorial</div>
+
+{% for d in tum_dersler %}
+
+{% if d.alt_basliklar.all %}
+
+<details class="sidebar-accordion" {% if d.slug == ders.slug %}open{% endif %}>
+<summary onclick="goLesson(event,'{% url 'ders_detay' slug=d.slug %}')">
+{{ d.baslik }}
+<span class="acc-icon" onclick="toggleAccordion(event)" style="font-size:10px;color:#555;cursor:pointer;">
+{% if d.slug == ders.slug %}▼{% else %}▶{% endif %}
+</span>
+</summary>
+
+<div class="sub-menu-container">
+
+{% for alt in d.alt_basliklar.all %}
+
+<a href="{% url 'ders_detay' slug=d.slug %}#alt-{{ alt.id }}"
+class="sub-link {% if alt.id in tamamlanan_alt_basliklar %}active-link{% endif %}"
+data-sub-id="{{ alt.id }}"
+onclick="showSection('alt-{{ alt.id }}')">
+
+{{ alt.baslik }}
+<span class="side-tick">
+{% if alt.id in tamamlanan_alt_basliklar %}✔{% endif %}
+</span>
+</a>
+
+{% endfor %}
+
+</div>
+</details>
+
+{% else %}
+
+<a href="{% url 'ders_detay' slug=d.slug %}"
+class="main-link {% if d.slug == ders.slug %}active-link{% endif %}"
+onclick="showSection('main-content')">
+{{ d.baslik }}
+</a>
+
+{% endif %}
+
+{% endfor %}
+
+</nav>
+
+<main class="tutorial-content">
+
+<div id="main-content" class="content-section active">
+
+<h1 class="main-title">{{ ders.baslik }}</h1>
+
+<div class="content-nav" style="margin:25px 0;">
+{% if onceki_ders %}
+<a href="{% url 'ders_detay' slug=onceki_ders.slug %}" class="btn-nav">« Geri</a>
+{% endif %}
+{% if sonraki_ders %}
+<a href="{% url 'ders_detay' slug=sonraki_ders.slug %}" class="btn-nav" style="float:right;">İleri »</a>
+{% endif %}
+<div style="clear:both;"></div>
+</div>
+
+<hr style="border:0;border-bottom:1px solid #eee;margin:30px 0;">
+
+{% if ders.icerik %}
+<div class="main-lesson-content">
+{{ ders.icerik|safe }}
+</div>
+{% endif %}
+
+</div>
+
+{% for alt in alt_basliklar %}
+
+<div id="alt-{{ alt.id }}" class="content-section">
+<h1 class="main-title">{{ alt.baslik }}</h1>
+<hr style="border:0;border-bottom:1px solid #eee;margin:30px 0;">
+<div class="sub-content">
+{{ alt.icerik|safe }}
+</div>
+</div>
+
+{% endfor %}
+
+</main>
+
+</div>
+
+<script>
+function goLesson(e,url){
+    if(!e.target.classList.contains("acc-icon")){
+        window.location.href=url
+    }
+}
+
+function toggleAccordion(e){
+    e.stopPropagation()
+}
+
+function showSection(sectionId){
+    // tüm içerikleri gizle
+    document.querySelectorAll('.content-section').forEach(sec=>{
+        sec.classList.remove('active')
+    })
+
+    const target=document.getElementById(sectionId)
+    if(target){
+        target.classList.add('active')
+        window.scrollTo(0,0)
+    }
+
+    // tüm linklerin aktifliğini kaldır
+    document.querySelectorAll('.sub-link,.main-link, .sidebar-accordion summary').forEach(l=>{
+        l.classList.remove('active-link','summary-active')
+    })
+
+    // aktif alt başlık linki
+    let activeLink = null
+    if(sectionId.startsWith('alt-')){
+        const altId = sectionId.replace('alt-','')
+        activeLink = document.querySelector(`.sub-link[data-sub-id="${altId}"]`)
+        if(activeLink){
+            activeLink.classList.add('active-link')
+            // ana başlığı yeşil yap
+            const parentAccordion = activeLink.closest('.sidebar-accordion')
+            if(parentAccordion){
+                parentAccordion.querySelector('summary').classList.add('summary-active')
+            }
+        }
+    } else if(sectionId === 'main-content'){
+        // main content aktif
+        activeLink = document.querySelector(`.main-link[href$="#main-content"], .sub-link[href$="#main-content"]`)
+        if(activeLink) activeLink.classList.add('active-link')
+    }
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+    const hash = window.location.hash.replace('#','')
+    if(hash && document.getElementById(hash)){
+        showSection(hash)
+    } else {
+        showSection('main-content')
+    }
+
+    document.querySelectorAll('.sidebar-accordion').forEach(acc=>{
+        const icon=acc.querySelector('.acc-icon')
+        acc.addEventListener('toggle',()=>{
+            if(icon) icon.textContent=acc.open?'▼':'▶'
+        })
+    })
+
+    const markAsComplete=(altId)=>{
+        fetch("{% url 'alt_baslik_tamamla' %}",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                "X-CSRFToken":"{{ csrf_token }}"
+            },
+            body:JSON.stringify({"alt_baslik_id":altId})
+        }).then(res=>{
+            if(res.ok){
+                const tickSpan=document.querySelector(`.sub-link[data-sub-id="${altId}"] .side-tick`)
+                if(tickSpan) tickSpan.textContent="✔"
+            }
+        })
+    }
+
+    document.querySelectorAll('.sub-link').forEach(link=>{
+        link.addEventListener('click',function(){
+            const altId=this.dataset.subId
+            markAsComplete(altId)
+            showSection(this.getAttribute('href').split('#')[1])
+        })
+    })
+})
+</script>
+
+{% endblock %}

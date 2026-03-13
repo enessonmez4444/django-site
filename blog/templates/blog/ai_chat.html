@@ -1,0 +1,145 @@
+{% extends "blog/base.html" %}
+
+{% block title %}AI Asistan | Enes Sönmez{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --ai-primary: #2ecc71;
+        --ai-bg: #f8f9fa;
+    }
+
+    .ai-wrapper {
+        max-width: 700px;
+        margin: 50px auto;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Üst Bilgi Alanı */
+    .ai-header {
+        background: #2c3e50;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        border-bottom: 4px solid var(--ai-primary);
+    }
+
+    .ai-header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; }
+    .ai-status { font-size: 0.8rem; color: var(--ai-primary); font-weight: bold; }
+
+    /* Mesaj Alanı */
+    .chat-area {
+        height: 450px;
+        padding: 25px;
+        background: var(--ai-bg);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Karşılama Mesajı Tasarımı */
+    .welcome-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        border-left: 5px solid var(--ai-primary);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        animation: fadeIn 0.8s ease-in;
+    }
+
+    .welcome-card p { margin: 0; color: #444; line-height: 1.6; }
+
+    /* Yapay Zeka Cevabı (Eğer bir cevap gelmişse) */
+    .ai-response {
+        align-self: flex-start;
+        background: #e9ecef;
+        padding: 15px;
+        border-radius: 15px 15px 15px 0;
+        max-width: 90%;
+        color: #333;
+        border: 1px solid #dee2e6;
+    }
+
+    /* Giriş Formu */
+    .input-container {
+        padding: 20px;
+        background: white;
+        border-top: 1px solid #eee;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .input-group input {
+        flex: 1;
+        padding: 12px 18px;
+        border: 2px solid #eee;
+        border-radius: 30px;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    .input-group input:focus { border-color: var(--ai-primary); }
+
+    .send-button {
+        background: var(--ai-primary);
+        color: white;
+        border: none;
+        padding: 0 25px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .send-button:hover { background: #27ae60; transform: translateY(-2px); }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="ai-wrapper">
+    <div class="ai-header">
+        <h2>CORE AI SYSTEM</h2>
+        <span class="ai-status">● SİSTEM AKTİF</span>
+    </div>
+
+    <div class="chat-area">
+        <div class="welcome-card">
+            <p><strong>Sistem Mesajı:</strong><br>
+            Hoşgeldiniz. Benim Kurucum <strong>Enes Sönmez</strong>, size nasıl yardımcı olabilirim?</p>
+        </div>
+
+        {% if ai_cevap %}
+            <div class="ai-response">
+                {{ ai_cevap }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="input-container">
+        <form method="POST" class="input-group">
+            {% csrf_token %}
+            <input type="text" name="soru" placeholder="Komutunuzu buraya yazın..." required autocomplete="off">
+            <button type="submit" class="send-button">GÖNDER</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Sayfa yüklendiğinde mesaj alanını en aşağıya çek
+    const chatArea = document.querySelector('.chat-area');
+    chatArea.scrollTop = chatArea.scrollHeight;
+</script>
+{% endblock %}

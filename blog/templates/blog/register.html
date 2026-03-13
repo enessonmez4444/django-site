@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Kayıt{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2>Kayıt Ol</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Kayıt Ol</button>
+  </form>
+</div>
+{% endblock %}

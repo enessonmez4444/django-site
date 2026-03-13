@@ -1,0 +1,54 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 50px auto; background: #ffffff; padding: 45px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); font-family: 'Segoe UI', sans-serif;">
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #2b5b83; font-size: 36px; margin-bottom: 10px;">Merhaba, Ben <span style="color: #ffcc00;">Enes Sönmez</span> 👋</h1>
+        <p style="font-size: 18px; color: #666; font-style: italic;">"3 yıllık Python serüvenimi ve tüm bildiklerimi burada paylaşıyorum."</p>
+    </div>
+
+    <div style="line-height: 1.8; color: #444; font-size: 17px;">
+        <p>
+            Yaklaşık <strong>3 yıldır Python yazılım dili</strong> ile yatıp kalkıyorum. Bu süreçte hem çok şey öğrendim hem de birçok hata yaptım. Bu sitenin en büyük farkı; burada süslü cümlelerle değil, <strong>objektif bir bakış açısıyla</strong> Python'ın ne olduğunu, ne işe yaradığını ve nerede tıkandığını açıkça anlatacak olmam. 
+        </p>
+        <p style="margin-top: 15px;">
+            Yazılım dünyasında "her şey çok kolay" diyenlere inat, zorlukları da güzellikleri de olduğu gibi önüne sermeye geldim. Python ile yapılabileceklerin sınırını zorlarken, bir yandan da bu yola yeni girecek olanlara en gerçekçi rehberi sunmayı hedefliyorum.
+        </p>
+    </div>
+
+    <div style="margin-top: 50px;">
+        <h2 style="color: #2b5b83; border-left: 5px solid #ffcc00; padding-left: 15px; margin-bottom: 25px;">Neler Yapıyorum?</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            
+            <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                <h4 style="color: #2b5b83; margin-bottom: 10px;">🐍 Python Geliştirme</h4>
+                <p style="font-size: 14px; color: #555;">Veri işleme, otomasyon sistemleri ve karmaşık algoritmaların Python ile hayata geçirilmesi.</p>
+            </div>
+
+            <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                <h4 style="color: #2b5b83; margin-bottom: 10px;">🌐 Web Frameworkleri</h4>
+                <p style="font-size: 14px; color: #555;">Django kullanarak hızlı, güvenli ve ölçeklenebilir web uygulamaları tasarlıyorum.</p>
+            </div>
+
+            <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                <h4 style="color: #2b5b83; margin-bottom: 10px;">🧠 AI Entegrasyonu</h4>
+                <p style="font-size: 14px; color: #555;">Yapay zeka modellerini (Gemini, OpenAI) Python projelerine entegre ederek akıllı çözümler üretiyorum.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div style="margin-top: 50px; padding: 25px; background: #2b5b83; border-radius: 12px; color: white; text-align: center;">
+        <h3 style="margin-bottom: 10px;">Objektif Python Rehberi</h3>
+        <p style="font-size: 15px; opacity: 0.9;">
+            Python ile yapılabilecekler derya deniz; ama doğru yolu bilmek şart. 3 yıllık tecrübemle, bu denizde kaybolmamanız için buradayım.
+        </p>
+        <div style="margin-top: 20px;">
+            <a href="{% url 'iletisim' %}" style="background: #ffcc00; color: #2b5b83; padding: 10px 25px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s;">Bana Ulaşın</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

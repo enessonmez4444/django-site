@@ -1,0 +1,139 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Grafik Analizi - PythonTürkçe{% endblock %}
+
+{% block content %}
+<style>
+    /* NAVBAR BUTONLARINI FORMLA EŞİTLEME */
+    
+    /* Giriş Butonu: Arka plan sarı olsun, beyazlık kalmasın */
+    .navbar .login {
+        background: #ffcc00 !important;
+        color: #2b5b83 !important;
+        border: 2px solid #ffcc00 !important;
+    }
+    .navbar .login:hover {
+        background: white !important;
+        border-color: white !important;
+        color: #2b5b83 !important;
+    }
+
+    /* Kayıt Butonu: Lacivert zemin + sarı çerçeve */
+    .navbar .register {
+        background: #2b5b83 !important;
+        color: white !important;
+        border: 2px solid #ffcc00 !important;
+    }
+    .navbar .register:hover {
+        background: #ffcc00 !important;
+        color: #2b5b83 !important;
+        border-color: #ffcc00 !important;
+    }
+
+    /* FORM ÖZEL STİLLERİ */
+    input:focus, select:focus {
+        outline:none;
+        border-color:#2b5b83;
+        box-shadow:0 0 5px rgba(43,91,131,0.5);
+    }
+
+    /* Form - Temizle Butonu (Giriş butonuyla aynı mantık: Sarı zemin) */
+    .form-btn-clear {
+        background:#ffcc00;
+        color:#2b5b83;
+        border:2px solid #ffcc00;
+        font-weight:700;
+        transition:0.3s;
+        cursor: pointer;
+    }
+    .form-btn-clear:hover {
+        background:white;
+        color:#2b5b83;
+    }
+
+    /* Form - Grafik Oluştur Butonu (Kayıt butonuyla aynı mantık: Lacivert zemin) */
+    .form-btn-create {
+        background:#2b5b83;
+        color:white;
+        border:2px solid #ffcc00;
+        font-weight:700;
+        transition:0.3s;
+        cursor: pointer;
+    }
+    .form-btn-create:hover {
+        background:#ffcc00;
+        color:#2b5b83;
+    }
+</style>
+
+<div style="max-width: 900px; margin:50px auto; padding:40px; background:#ffffff; border-radius:25px; box-shadow:0 10px 25px rgba(0,0,0,0.1);">
+
+    <h2 style="text-align:center; color:#2b5b83; font-size:2.5rem; margin-bottom:20px;">📈 Grafik Oluştur</h2>
+    <p style="text-align:center; color:#4a5568; font-size:1.1rem; margin-bottom:35px;">
+        X ve Y değerlerinizi girin, grafik türünü seçin ve kendi renginizi mouse ile belirleyin.
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div style="margin-bottom:20px;">
+            <label for="x_deger" style="font-weight:600; color:#2d3748;">X Değerleri (virgülle ayırın)</label>
+            <input type="text" id="x_deger" name="x_deger" placeholder="örn: 1,2,3,4" required
+                style="width:100%; padding:12px 15px; margin-top:5px; border-radius:12px; border:1px solid #cbd5e0; font-size:16px;">
+        </div>
+
+        <div style="margin-bottom:20px;">
+            <label for="y_deger" style="font-weight:600; color:#2d3748;">Y Değerleri (virgülle ayırın)</label>
+            <input type="text" id="y_deger" name="y_deger" placeholder="örn: 10,20,30,40" required
+                style="width:100%; padding:12px 15px; margin-top:5px; border-radius:12px; border:1px solid #cbd5e0; font-size:16px;">
+        </div>
+
+        <div style="margin-bottom:20px;">
+            <label for="tur" style="font-weight:600; color:#2d3748;">Grafik Türü</label>
+            <select id="tur" name="tur" style="width:100%; padding:12px 15px; margin-top:5px; border-radius:12px; border:1px solid #cbd5e0; font-size:16px;">
+                <option value="line">Çizgi Grafiği</option>
+                <option value="bar">Bar Grafiği</option>
+                <option value="scatter">Scatter Grafiği</option>
+                <option value="pie">Pasta Grafiği</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom:20px;">
+            <label for="renk" style="font-weight:600; color:#2d3748;">Renk Seçimi</label>
+            <input type="color" id="renk" name="renk" value="#2b5b83" style="width:100%; height:50px; border-radius:12px; border:1px solid #cbd5e0; padding:0;">
+        </div>
+
+        <div style="margin-bottom:20px;">
+            <label for="baslik" style="font-weight:600; color:#2d3748;">Grafik Başlığı</label>
+            <input type="text" id="baslik" name="baslik" placeholder="Grafik Başlığı" style="width:100%; padding:12px 15px; margin-top:5px; border-radius:12px; border:1px solid #cbd5e0; font-size:16px;">
+        </div>
+
+        <div style="display:flex; gap:15px; margin-top:25px;">
+            <button type="submit" class="form-btn-create" style="flex:1; padding:12px; font-size:16px; border-radius:12px;">Grafik Oluştur</button>
+            <button type="submit" name="temizle" class="form-btn-clear" style="flex:1; padding:12px; font-size:16px; border-radius:12px;">Temizle</button>
+        </div>
+    </form>
+
+    {% if grafik_base64 %}
+    <div style="text-align:center; margin-top:40px; padding:20px; background:#f1f5f9; border-radius:20px;">
+        <h3 style="color:#2b5b83; margin-bottom:20px;">Oluşturulan Grafik</h3>
+        <img src="data:image/png;base64,{{ grafik_base64 }}" style="max-width:100%; border-radius:15px; box-shadow:0 5px 20px rgba(0,0,0,0.15);">
+
+        {% if python_kodu %}
+        <button onclick="toggleCode()" style="margin-top:25px; padding:10px 15px; border:none; border-radius:10px; background:#2b5b83; color:white; font-weight:600; cursor:pointer;">
+            Kod Göster / Gizle
+        </button>
+        <pre id="codeBlock" style="display:none; text-align:left; background:#e2e8f0; padding:15px; border-radius:12px; margin-top:15px; overflow-x:auto;">{{ python_kodu }}</pre>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+function toggleCode() {
+    var code = document.getElementById("codeBlock");
+    code.style.display = (code.style.display === "none") ? "block" : "none";
+}
+</script>
+{% endblock %}

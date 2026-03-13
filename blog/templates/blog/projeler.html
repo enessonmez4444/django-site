@@ -1,0 +1,445 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Projeler | Orta Düzey Python Uygulamaları{% endblock %}
+
+{% block content %}
+<div id="project-master-wrapper" style="width: 100%; max-width: 1100px; margin: 0 auto; padding: 20px; font-family: 'Segoe UI', sans-serif;">
+
+    <style>
+        .project-header {
+            background: #1a202c; color: white; padding: 35px; border-radius: 15px;
+            text-align: center; margin-bottom: 40px; border-bottom: 6px solid #38a169;
+        }
+        .level-tag {
+            background: #38a169; color: white; padding: 12px 25px;
+            display: inline-block; border-radius: 8px; margin-bottom: 25px; font-weight: 800;
+        }
+        .project-card {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+            margin-bottom: 25px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .project-card-header {
+            padding: 20px 25px; background: #f1f5f9; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .project-card-header h3 { margin: 0; font-size: 18px; color: #1a202c; }
+        
+        .project-card-content { display: none; background: #1e1e1e; border-top: 2px solid #38a169; }
+        
+        pre { margin: 0; padding: 25px; color: #d4d4d4; font-family: 'Consolas', monospace; font-size: 14px; overflow-x: auto; line-height: 1.6; }
+        .k { color: #569cd6; } /* keyword */
+        .f { color: #dcdcaa; } /* function */
+        .s { color: #ce9178; } /* string */
+        .n { color: #b5cea8; } /* number */
+        .c { color: #6a9955; } /* comment */
+    </style>
+
+    <div class="project-header">
+        <h1 style="margin:0;">💻 Orta Düzey Uygulama Laboratuvarı</h1>
+        <p style="margin-top: 10px; opacity: 0.9;">Tüm Projeler Kaynak Kodlarıyla Birlikte Tam Liste</p>
+    </div>
+
+    <div class="level-tag">📂 ORTA DÜZEY PROGRAMLAR</div>
+
+    <div class="project-card">
+        <div class="project-card-header" onclick="toggleProject(this)">
+            <h3>1. JSON Tabanlı Not Defteri</h3>
+            <span style="color: #38a169; font-weight: bold;">[KODU GÖR]</span>
+        </div>
+
+    
+        <div class="project-card-content">
+            <pre><span class="k">import</span> json
+
+<span class="k">class</span> <span class="f">NotDefteri</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self):
+        self.notlar = []
+        self.dosya = <span class="s">"notlar.json"</span>
+        self.yukle()
+
+    <span class="k">def</span> <span class="f">not_ekle</span>(self, baslik, icerik):
+        yeni_not = {<span class="s">"baslik"</span>: baslik, <span class="s">"icerik"</span>: icerik}
+        self.notlar.append(yeni_not)
+        <span class="f">print</span>(<span class="s">"Not eklendi."</span>)
+
+    <span class="k">def</span> <span class="f">notlari_goster</span>(self):
+        <span class="k">if</span> <span class="f">len</span>(self.notlar) == <span class="n">0</span>:
+            <span class="f">print</span>(<span class="s">"Hiç not yok."</span>)
+            <span class="k">return</span>
+        <span class="k">for</span> i, notum <span class="k">in</span> <span class="f">enumerate</span>(self.notlar, start=<span class="n">1</span>):
+            <span class="f">print</span>(f<span class="s">"\n{i}. {notum['baslik']}"</span>)
+            <span class="f">print</span>(notum[<span class="s">'icerik'</span>])
+
+    <span class="k">def</span> <span class="f">not_sil</span>(self, index):
+        <span class="k">if</span> index < <span class="n">1</span> <span class="k">or</span> index > <span class="f">len</span>(self.notlar):
+            <span class="f">print</span>(<span class="s">"Geçersiz numara"</span>)
+            <span class="k">return</span>
+        silinen = self.notlar.pop(index - <span class="n">1</span>)
+        <span class="f">print</span>(f<span class="s">"{silinen['baslik']} silindi."</span>)
+
+    <span class="k">def</span> <span class="f">kaydet</span>(self):
+        <span class="k">with</span> <span class="f">open</span>(self.dosya, <span class="s">"w"</span>, encoding=<span class="s">"utf-8"</span>) <span class="k">as</span> f:
+            json.dump(self.notlar, f, ensure_ascii=<span class="n">False</span>, indent=<span class="n">4</span>)
+        <span class="f">print</span>(<span class="s">"Notlar kaydedildi."</span>)
+
+    <span class="k">def</span> <span class="f">yukle</span>(self):
+        <span class="k">try</span>:
+            <span class="k">with</span> <span class="f">open</span>(self.dosya, <span class="s">"r"</span>, encoding=<span class="s">"utf-8"</span>) <span class="k">as</span> f:
+                self.notlar = json.load(f)
+        <span class="k">except</span>:
+            self.notlar = []
+
+<span class="k">def</span> <span class="f">menu</span>():
+    uygulama = NotDefteri()
+    <span class="k">while</span> <span class="n">True</span>:
+        <span class="f">print</span>(<span class="s">"\n--- NOT DEFTERİ ---"</span>)
+        <span class="f">print</span>(<span class="s">"1 - Not Ekle\n2 - Notları Göster\n3 - Not Sil\n4 - Kaydet\n5 - Çıkış"</span>)
+        secim = <span class="f">input</span>(<span class="s">"Seçim: "</span>)
+        <span class="k">if</span> secim == <span class="s">"1"</span>:
+            uygulama.not_ekle(<span class="f">input</span>(<span class="s">"Başlık: "</span>), <span class="f">input</span>(<span class="s">"İçerik: "</span>))
+        <span class="k">elif</span> secim == <span class="s">"2"</span>:
+            uygulama.notlari_goster()
+        <span class="k">elif</span> secim == <span class="s">"3"</span>:
+            uygulama.notlari_goster()
+            no = <span class="f">int</span>(<span class="f">input</span>(<span class="s">"Silinecek no: "</span>))
+            uygulama.not_sil(no)
+        <span class="k">elif</span> secim == <span class="s">"4"</span>:
+            uygulama.kaydet()
+        <span class="k">elif</span> secim == <span class="s">"5"</span>:
+            uygulama.kaydet()
+            <span class="k">break</span>
+
+<span class="f">menu</span>()</pre>
+        </div>
+    </div>
+
+    <div class="project-card">
+        <div class="project-card-header" onclick="toggleProject(this)">
+            <h3>2. ATM Sistemi Simülasyonu</h3>
+            <span style="color: #38a169; font-weight: bold;">[KODU GÖR]</span>
+        </div>
+        <div class="project-card-content">
+            <pre><span class="k">class</span> <span class="f">ATM</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self, isim, pin, bakiye):
+        self.isim = isim
+        self.pin = pin
+        self.bakiye = bakiye
+
+    <span class="k">def</span> <span class="f">giris</span>(self):
+        deneme = <span class="n">3</span>
+        <span class="k">while</span> deneme > <span class="n">0</span>:
+            girilen_pin = <span class="f">input</span>(<span class="s">"PIN giriniz: "</span>)
+            <span class="k">if</span> girilen_pin == self.pin:
+                <span class="f">print</span>(f<span class="s">"Hoşgeldiniz {self.isim}"</span>)
+                <span class="k">return</span> <span class="n">True</span>
+            deneme -= <span class="n">1</span>
+            <span class="f">print</span>(f<span class="s">"Hatalı PIN. Kalan deneme: {deneme}"</span>)
+        <span class="k">return</span> <span class="n">False</span>
+
+    <span class="k">def</span> <span class="f">bakiye_goster</span>(self):
+        <span class="f">print</span>(f<span class="s">"Bakiyeniz: {self.bakiye} TL"</span>)
+
+    <span class="k">def</span> <span class="f">para_yatir</span>(self, miktar):
+        self.bakiye += miktar
+        <span class="f">print</span>(<span class="s">"Para yatırıldı."</span>)
+
+    <span class="k">def</span> <span class="f">para_cek</span>(self, miktar):
+        <span class="k">if</span> miktar > self.bakiye:
+            <span class="f">print</span>(<span class="s">"Yetersiz bakiye."</span>)
+        <span class="k">else</span>:
+            self.bakiye -= miktar
+            <span class="f">print</span>(<span class="s">"Para çekildi."</span>)
+
+<span class="k">def</span> <span class="f">menu</span>():
+    hesap = ATM(<span class="s">"Enes"</span>, <span class="s">"1234"</span>, <span class="n">1000</span>)
+    <span class="k">if</span> hesap.giris():
+        <span class="k">while</span> <span class="n">True</span>:
+            <span class="f">print</span>(<span class="s">"\n--- ATM ---\n1-Bakiye 2-Yatır 3-Çek 4-Çıkış"</span>)
+            s = <span class="f">input</span>(<span class="s">"Seçim: "</span>)
+            <span class="k">if</span> s == <span class="s">"1"</span>: hesap.bakiye_goster()
+            <span class="k">elif</span> s == <span class="s">"2"</span>: hesap.para_yatir(<span class="f">int</span>(<span class="f">input</span>(<span class="s">"Yatırılacak miktar: "</span>)))
+            <span class="k">elif</span> s == <span class="s">"3"</span>: hesap.para_cek(<span class="f">int</span>(<span class="f">input</span>(<span class="s">"Çekilecek miktar: "</span>)))
+            <span class="k">elif</span> s == <span class="s">"4"</span>: <span class="k">break</span>
+
+<span class="f">menu</span>()</pre>
+        </div>
+    </div>
+
+    <div class="project-card">
+        <div class="project-card-header" onclick="toggleProject(this)">
+            <h3>3. Çoklu Hesap & Transfer Sistemi</h3>
+            <span style="color: #38a169; font-weight: bold;">[KODU GÖR]</span>
+        </div>
+        <div class="project-card-content">
+            <pre><span class="k">class</span> <span class="f">Hesap</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self, isim, sifre, bakiye=<span class="n">0</span>):
+        self.isim = isim
+        self.sifre = sifre
+        self.bakiye = bakiye
+
+    <span class="k">def</span> <span class="f">bakiye_goster</span>(self):
+        <span class="f">print</span>(f<span class="s">"Bakiyeniz: {self.bakiye} TL"</span>)
+
+    <span class="k">def</span> <span class="f">para_yatir</span>(self, miktar):
+        self.bakiye += miktar
+        <span class="f">print</span>(<span class="s">"Para yatırıldı."</span>)
+
+    <span class="k">def</span> <span class="f">para_cek</span>(self, miktar):
+        <span class="k">if</span> miktar > self.bakiye: <span class="f">print</span>(<span class="s">"Yetersiz bakiye"</span>)
+        <span class="k">else</span>:
+            self.bakiye -= miktar
+            <span class="f">print</span>(<span class="s">"Para çekildi."</span>)
+
+    <span class="k">def</span> <span class="f">para_gonder</span>(self, diger_hesap, miktar):
+        <span class="k">if</span> miktar > self.bakiye: <span class="f">print</span>(<span class="s">"Yetersiz bakiye"</span>)
+        <span class="k">else</span>:
+            self.bakiye -= miktar
+            diger_hesap.bakiye += miktar
+            <span class="f">print</span>(<span class="s">"Para gönderildi."</span>)
+
+<span class="k">class</span> <span class="f">Banka</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self):
+        self.hesaplar = []
+
+    <span class="k">def</span> <span class="f">hesap_olustur</span>(self):
+        i, s = <span class="f">input</span>(<span class="s">"İsim: "</span>), <span class="f">input</span>(<span class="s">"Şifre: "</span>)
+        self.hesaplar.append(Hesap(i, s))
+        <span class="f">print</span>(<span class="s">"Hesap oluşturuldu."</span>)
+
+    <span class="k">def</span> <span class="f">giris</span>(self):
+        i, s = <span class="f">input</span>(<span class="s">"İsim: "</span>), <span class="f">input</span>(<span class="s">"Şifre: "</span>)
+        <span class="k">for</span> h <span class="k">in</span> self.hesaplar:
+            <span class="k">if</span> h.isim == i <span class="k">and</span> h.sifre == s: <span class="k">return</span> h
+        <span class="k">return</span> <span class="n">None</span>
+
+<span class="k">def</span> <span class="f">menu</span>():
+    banka = Banka()
+    <span class="k">while</span> <span class="n">True</span>:
+        <span class="f">print</span>(<span class="s">"\n--- BANKA SİSTEMİ ---\n1-Hesap Aç 2-Giriş 3-Çıkış"</span>)
+        sec = <span class="f">input</span>(<span class="s">"Seçim: "</span>)
+        <span class="k">if</span> sec == <span class="s">"1"</span>: banka.hesap_olustur()
+        <span class="k">elif</span> sec == <span class="s">"2"</span>:
+            h = banka.giris()
+            <span class="k">if</span> h:
+                <span class="k">while</span> <span class="n">True</span>:
+                    <span class="f">print</span>(<span class="s">"\n--- HESAP MENÜ ---\n1-Bakiye 2-Yatır 3-Çek 4-Gönder 5-Çıkış"</span>)
+                    s2 = <span class="f">input</span>(<span class="s">"Seçim: "</span>)
+                    <span class="k">if</span> s2 == <span class="s">"1"</span>: h.bakiye_goster()
+                    <span class="k">elif</span> s2 == <span class="s">"2"</span>: h.para_yatir(<span class="f">int</span>(<span class="f">input</span>(<span class="s">"Miktar: "</span>)))
+                    <span class="k">elif</span> s2 == <span class="s">"3"</span>: h.para_cek(<span class="f">int</span>(<span class="f">input</span>(<span class="s">"Miktar: "</span>)))
+                    <span class="k">elif</span> s2 == <span class="s">"4"</span>:
+                        hedef = <span class="f">input</span>(<span class="s">"Alıcı: "</span>)
+                        m = <span class="f">int</span>(<span class="f">input</span>(<span class="s">"Miktar: "</span>))
+                        <span class="k">for</span> alici <span class="k">in</span> banka.hesaplar:
+                            <span class="k">if</span> alici.isim == hedef:
+                                h.para_gonder(alici, m)
+                                <span class="k">break</span>
+                        <span class="k">else</span>: <span class="f">print</span>(<span class="s">"Alıcı bulunamadı"</span>)
+                    <span class="k">elif</span> s2 == <span class="s">"5"</span>: <span class="k">break</span>
+        <span class="k">elif</span> sec == <span class="s">"3"</span>: <span class="k">break</span>
+
+<span class="f">menu</span>()</pre>
+        </div>
+    </div>
+
+    <div class="project-card">
+        <div class="project-card-header" onclick="toggleProject(this)">
+            <h3>4. Öğrenci Otomasyonu</h3>
+            <span style="color: #38a169; font-weight: bold;">[KODU GÖR]</span>
+        </div>
+        <div class="project-card-content">
+            <pre><span class="k">class</span> <span class="f">Ogrenci</span>:
+    <span class="k">def</span> <span class="f">__init__</span>(self, isim, numara):
+        self.isim = isim
+        self.numara = numara
+        self.notlar = []
+
+    <span class="k">def</span> <span class="f">not_ekle</span>(self, notu):
+        self.notlar.append(notu)
+        <span class="f">print</span>(<span class="s">"Not eklendi"</span>)
+
+    <span class="k">def</span> <span class="f">ortalama_hesapla</span>(self):
+        <span class="k">if</span> <span class="f">len</span>(self.notlar) == <span class="n">0</span>: <span class="k">return</span> <span class="n">0</span>
+        <span class="k">return</span> <span class="f">sum</span>(self.notlar) / <span class="f">len</span>(self.notlar)
+
+    <span class="k">def</span> <span class="f">bilgileri_goster</span>(self):
+        <span class="f">print</span>(f<span class="s">"\nİsim: {self.isim}, No: {self.numara}, Ort: {self.ortalama_hesapla()}"</span>)
+
+<span class="k">def</span> <span class="f">menu</span>():
+    ogrenciler = []
+    <span class="k">while</span> <span class="n">True</span>:
+        <span class="f">print</span>(<span class="s">"\n--- ÖĞRENCİ OTOMASYONU ---\n1-Ekle 2-Not Gir 3-Listele 4-Çıkış"</span>)
+        sec = <span class="f">input</span>(<span class="s">"Seçim: "</span>)
+        <span class="k">if</span> sec == <span class="s">"1"</span>:
+            ogrenciler.append(Ogrenci(<span class="f">input</span>(<span class="s">"İsim: "</span>), <span class="f">input</span>(<span class="s">"No: "</span>)))
+            <span class="f">print</span>(<span class="s">"Kayıt başarılı."</span>)
+        <span class="k">elif</span> sec == <span class="s">"2"</span>:
+            no = <span class="f">input</span>(<span class="s">"Öğrenci No: "</span>)
+            <span class="k">for</span> o <span class="k">in</span> ogrenciler:
+                <span class="k">if</span> o.numara == no:
+                    o.not_ekle(<span class="f">int</span>(<span class="f">input</span>(<span class="s">"Not: "</span>)))
+                    <span class="k">break</span>
+            <span class="k">else</span>: <span class="f">print</span>(<span class="s">"Öğrenci bulunamadı."</span>)
+        <span class="k">elif</span> sec == <span class="s">"3"</span>:
+            <span class="k">for</span> o <span class="k">in</span> ogrenciler: o.bilgileri_goster()
+        <span class="k">elif</span> sec == <span class="s">"4"</span>: <span class="k">break</span>
+
+<span class="f">menu</span>()</pre>
+
+        </div>
+        
+    </div>
+    <div class="project-card">
+        <div class="project-card-header" onclick="toggleProject(this)">
+            <h3>5. XOR Şifrelemeli Not Sistemi</h3>
+            <span style="color: #38a169; font-weight: bold;">[KODU GÖR]</span>
+        </div>
+        <div class="project-card-content">
+            <pre><span class="k">import</span> os
+
+<span class="k">def</span> <span class="f">sifrele</span>(metin, key):
+    <span class="c"># Metni basit XOR ile şifreler/çözer</span>
+    sonuc = <span class="s">""</span>
+    <span class="k">for</span> i <span class="k">in</span> <span class="f">range</span>(<span class="f">len</span>(metin)):
+        sonuc += <span class="f">chr</span>(<span class="f">ord</span>(metin[i]) ^ key)
+    <span class="k">return</span> sonuc
+
+<span class="k">def</span> <span class="f">kaydet</span>(dosya_adi, metin, key):
+    <span class="k">with</span> <span class="f">open</span>(dosya_adi, <span class="s">"w"</span>, encoding=<span class="s">"utf-8"</span>) <span class="k">as</span> f:
+        f.write(sifrele(metin, key))
+    <span class="f">print</span>(f<span class="s">"Notunuz '{dosya_adi}' dosyasına kaydedildi."</span>)
+
+<span class="k">def</span> <span class="f">oku</span>(dosya_adi, key):
+    <span class="k">if</span> <span class="k">not</span> os.path.exists(dosya_adi):
+        <span class="f">print</span>(<span class="s">"Dosya bulunamadı!"</span>)
+        <span class="k">return</span>
+    <span class="k">with</span> <span class="f">open</span>(dosya_adi, <span class="s">"r"</span>, encoding=<span class="s">"utf-8"</span>) <span class="k">as</span> f:
+        icerik = f.read()
+    <span class="f">print</span>(<span class="s">"Dosya içeriği:\n"</span>, sifrele(icerik, key))
+
+<span class="k">def</span> <span class="f">main</span>():
+    <span class="f">print</span>(<span class="s">"--- Şifreli Not Defteri ---"</span>)
+    key = <span class="f">int</span>(<span class="f">input</span>(<span class="s">"Şifreleme anahtarı (1-255): "</span>))
+    
+    <span class="k">while</span> <span class="n">True</span>:
+        <span class="f">print</span>(<span class="s">"\n1-Yaz/Kaydet 2-Oku 3-Çıkış"</span>)
+        secim = <span class="f">input</span>(<span class="s">"Seçim: "</span>)
+        <span class="k">if</span> secim == <span class="s">"1"</span>:
+            dosya = <span class="f">input</span>(<span class="s">"Dosya adı: "</span>)
+            metin = <span class="f">input</span>(<span class="s">"Notunuz: "</span>)
+            kaydet(dosya, metin, key)
+        <span class="k">elif</span> secim == <span class="s">"2"</span>:
+            dosya = <span class="f">input</span>(<span class="s">"Dosya adı: "</span>)
+            oku(dosya, key)
+        <span class="k">elif</span> secim == <span class="s">"3"</span>: <span class="k">break</span>
+
+<span class="k">if</span> __name__ == <span class="s">"__main__"</span>:
+    <span class="f">main</span>()</pre>
+        </div>
+    </div>
+
+    <div class="project-card">
+        <div class="project-card-header" onclick="toggleProject(this)">
+            <h3>6. Sezar Şifrelemeli Görev Listesi</h3>
+            <span style="color: #38a169; font-weight: bold;">[KODU GÖR]</span>
+        </div>
+        <div class="project-card-content">
+            <pre><span class="k">import</span> os
+
+<span class="k">def</span> <span class="f">sifrele</span>(metin, key=<span class="n">3</span>):
+    <span class="k">return</span> <span class="s">""</span>.join([<span class="f">chr</span>(<span class="f">ord</span>(c)+key) <span class="k">for</span> c <span class="k">in</span> metin])
+
+<span class="k">def</span> <span class="f">cozumle</span>(metin, key=<span class="n">3</span>):
+    <span class="k">return</span> <span class="s">""</span>.join([<span class="f">chr</span>(<span class="f">ord</span>(c)-key) <span class="k">for</span> c <span class="k">in</span> metin])
+
+<span class="k">def</span> <span class="f">ekle</span>(gorev):
+    <span class="k">with</span> <span class="f">open</span>(<span class="s">"gorevler.txt"</span>,<span class="s">"a"</span>, encoding=<span class="s">"utf-8"</span>) <span class="k">as</span> f:
+        f.write(sifrele(gorev)+<span class="s">"\n"</span>)
+    <span class="f">print</span>(<span class="s">"Görev eklendi."</span>)
+
+<span class="k">def</span> <span class="f">listele</span>():
+    <span class="k">if</span> <span class="k">not</span> os.path.exists(<span class="s">"gorevler.txt"</span>):
+        <span class="f">print</span>(<span class="s">"Görev yok."</span>)
+        <span class="k">return</span>
+    <span class="k">with</span> <span class="f">open</span>(<span class="s">"gorevler.txt"</span>,<span class="s">"r"</span>, encoding=<span class="s">"utf-8"</span>) <span class="k">as</span> f:
+        <span class="k">for</span> idx, satir <span class="k">in</span> <span class="f">enumerate</span>(f.readlines(),<span class="n">1</span>):
+            <span class="f">print</span>(f<span class="s">"{idx}. {cozumle(satir.strip())}"</span>)
+
+<span class="k">while</span> <span class="n">True</span>:
+    secim = <span class="f">input</span>(<span class="s">"\n1-Ekle 2-Listele 3-Çıkış: "</span>)
+    <span class="k">if</span> secim==<span class="s">"1"</span>:
+        ekle(<span class="f">input</span>(<span class="s">"Görev: "</span>))
+    <span class="k">elif</span> secim==<span class="s">"2"</span>:
+        listele()
+    <span class="k">elif</span> secim==<span class="s">"3"</span>:
+        <span class="k">break</span></pre>
+        </div>
+    </div>
+
+    <div class="project-card">
+        <div class="project-card-header" onclick="toggleProject(this)">
+            <h3>7. JSON Kayıtlı Harf Notu Hesaplama</h3>
+            <span style="color: #38a169; font-weight: bold;">[KODU GÖR]</span>
+        </div>
+    
+    
+    
+        <div class="project-card-content">
+            <pre><span class="k">import</span> json, os
+
+    
+
+
+
+
+
+
+<span class="k">def</span> <span class="f">harf_notu</span>(not_ort):
+    <span class="k">if</span> not_ort>=<span class="n">90</span>: <span class="k">return</span> <span class="s">"AA"</span>
+    <span class="k">elif</span> not_ort>=<span class="n">80</span>: <span class="k">return</span> <span class="s">"BA"</span>
+    <span class="k">elif</span> not_ort>=<span class="n">70</span>: <span class="k">return</span> <span class="s">"BB"</span>
+    <span class="k">elif</span> not_ort>=<span class="n">60</span>: <span class="k">return</span> <span class="s">"CB"</span>
+    <span class="k">elif</span> not_ort>=<span class="n">50</span>: <span class="k">return</span> <span class="s">"CC"</span>
+    <span class="k">return</span> <span class="s">"FF"</span>
+
+<span class="k">def</span> <span class="f">kaydet</span>(veri):
+    <span class="k">with</span> <span class="f">open</span>(<span class="s">"ogrenciler.json"</span>,<span class="s">"w"</span>) <span class="k">as</span> f:
+        json.dump(veri,f)
+
+<span class="k">def</span> <span class="f">yukle</span>():
+    <span class="k">if</span> <span class="k">not</span> os.path.exists(<span class="s">"ogrenciler.json"</span>):
+        <span class="k">return</span> {}
+    <span class="k">with</span> <span class="f">open</span>(<span class="s">"ogrenciler.json"</span>,<span class="s">"r"</span>) <span class="k">as</span> f:
+        <span class="k">return</span> json.load(f)
+
+ogrenciler = yukle()
+
+<span class="k">while</span> <span class="n">True</span>:
+    secim=<span class="f">input</span>(<span class="s">"\n1-Ekle 2-Ortalama 3-Çıkış: "</span>)
+    <span class="k">if</span> secim==<span class="s">"1"</span>:
+        isim=<span class="f">input</span>(<span class="s">"İsim: "</span>)
+        notlar = <span class="f">list</span>(<span class="f">map</span>(<span class="f">int</span>,<span class="f">input</span>(<span class="s">"Notları (virgül ile): "</span>).split(<span class="s">","</span>)))
+        ogrenciler[isim]=notlar
+        kaydet(ogrenciler)
+    <span class="k">elif</span> secim==<span class="s">"2"</span>:
+        isim=<span class="f">input</span>(<span class="s">"İsim: "</span>)
+        notlar = ogrenciler.get(isim)
+        <span class="k">if</span> notlar:
+            ort=<span class="f">sum</span>(notlar)/<span class="f">len</span>(notlar)
+            <span class="f">print</span>(f<span class="s">"Ortalama: {ort:.2f}, Harf Notu: {harf_notu(ort)}"</span>)
+        <span class="k">else</span>:
+            <span class="f">print</span>(<span class="s">"Öğrenci yok."</span>)
+    <span class="k">elif</span> secim==<span class="s">"3"</span>:
+        <span class="k">break</span></pre>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function toggleProject(header) {
+        const content = header.nextElementSibling;
+        content.style.display = (content.style.display === "block") ? "none" : "block";
+    }
+</script>
+{% endblock %}
