@@ -1,14 +1,52 @@
 {% extends 'blog/base.html' %}
 
-{% block title %}Kayıt{% endblock %}
-
 {% block content %}
-<div class="form-container">
-  <h2>Kayıt Ol</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Kayıt Ol</button>
-  </form>
+<div style="max-width: 400px; margin: 80px auto; padding: 30px; border: 1px solid #eee; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: #fff; font-family: sans-serif;">
+    <h2 style="text-align: center; color: #333; margin-bottom: 25px;">Kayıt Ol</h2>
+    
+    <form method="post" style="display: flex; flex-direction: column; gap: 15px;">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <p style="color: #e74c3c; font-size: 14px; text-align: center;">
+                Lütfen tüm alanları doğru doldurun!
+            </p>
+        {% endif %}
+
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 10px;">
+            {{ form.as_p }}
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 12px; background: #04AA6D; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+            Kayıt Ol
+        </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+        <p style="color: #666; font-size: 14px;">
+            Zaten hesabınız var mı? <a href="{% url 'login' %}" style="color: #04AA6D; text-decoration: none; font-weight: bold;">Giriş Yapın</a>
+        </p>
+    </div>
 </div>
+
+<style>
+    form p {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        color: #555;
+        font-weight: bold;
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    button:hover {
+        background: #039c58 !important;
+    }
+</style>
 {% endblock %}

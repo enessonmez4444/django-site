@@ -6,10 +6,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
 SECRET_KEY = 'django-insecure-^x!&e3a$-7(eq2q*g$undvc((6bsx8r)mmvk&(#xp4nn$ri^9#'
-DEBUG = True  # Üretimde False yap
 
-# Railway deploy için
-ALLOWED_HOSTS = ['pythonturkce.up.railway.app']
+# DEBUG: Lokal test için True, prod için False
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+
+# Allowed hosts
+ALLOWED_HOSTS = [
+    'pythonturkce.up.railway.app',  # Railway prod
+    '127.0.0.1',                    # Lokal
+    'localhost'
+]
+
+# CSRF trusted origins (Django 6+)
+CSRF_TRUSTED_ORIGINS = [
+    'https://pythonturkce.up.railway.app',
+    'http://127.0.0.1:8000',
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -24,7 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Railway için ekledik
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Railway için
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -54,7 +66,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-# Database
+# Database (SQLite lokal için)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -77,9 +89,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Static files
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles"  # collectstatic ile prod için
 STATICFILES_DIRS = [
     BASE_DIR / "blog" / "static",
 ]
@@ -97,6 +109,5 @@ LOGIN_REDIRECT_URL = 'ana_sayfa'
 LOGOUT_REDIRECT_URL = 'ana_sayfa'
 LOGIN_URL = 'login'
 
-# YouTube Kanal Adresin
+# YouTube Kanal Adresi
 YOUTUBE_URL = "https://www.youtube.com/@pythonturkceakademi"
-
