@@ -7,6 +7,8 @@
 
 <title>{% block title %}Python Türkçe{% endblock %}</title>
 
+<link rel="icon" href="https://www.python.org/static/favicon.ico" type="image/x-icon">
+
 <style>
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -125,6 +127,35 @@ background:white;
 color:#2b5b83;
 }
 
+/* --- TELEFON DÜZENLEMESİ (HİÇBİR ŞEYİ SİLMEDEN EKLENDİ) --- */
+@media (max-width: 768px) {
+    .top-nav {
+        flex-direction: column; /* Logo, menü ve butonları alt alta al */
+        gap: 15px;
+        text-align: center;
+    }
+
+    .nav-menu {
+        justify-content: center; /* Menü linklerini ortala */
+        gap: 10px;
+    }
+
+    .nav-menu li {
+        width: 45%; /* Linkleri ikişerli yan yana veya tekli diz */
+        min-width: 120px;
+    }
+
+    .bottom-nav {
+        flex-wrap: wrap; /* Alt menü sığmazsa aşağı kaysın */
+        gap: 15px;
+        padding: 15px 0;
+    }
+    
+    .nav-buttons {
+        margin-top: 10px;
+    }
+}
+
 </style>
 
 </head>
@@ -134,8 +165,6 @@ color:#2b5b83;
 <nav class="navbar">
 
 <div class="nav-container">
-
-<!-- ÜST KISIM -->
 
 <div class="top-nav">
 
@@ -186,11 +215,8 @@ style="background:#ff4d4d;border:none;color:white;padding:7px 15px;border-radius
 </div>
 
 
-<!-- ALT MENÜ -->
-
 <div class="bottom-nav">
 
-<!-- AI Asistan linkini alt menüye ekledik -->
 <a href="{% url 'ai' %}">🧠 AI Asistan</a>
 
 <a href="/dokumanlar/">📂 Dökümanlar</a>
