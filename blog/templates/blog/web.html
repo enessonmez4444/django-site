@@ -19,7 +19,6 @@
         padding: 0 20px;
     }
 
-    /* Üst Başlık */
     .header-group {
         text-align: center;
         margin-bottom: 40px;
@@ -32,7 +31,7 @@
         color: #18181b;
     }
 
-    /* O Meşhur Geniş Arama Barı */
+    /* Form ve Arama Barı */
     .search-wrapper {
         background: #ffffff;
         border: 1px solid #e4e4e7;
@@ -58,6 +57,7 @@
         outline: none;
         font-size: 1.1rem;
         border-radius: 18px;
+        width: 100%;
     }
 
     .search-wrapper button {
@@ -71,6 +71,7 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         font-size: 0.9rem;
+        white-space: nowrap;
     }
 
     .search-wrapper button:hover {
@@ -78,7 +79,7 @@
         transform: scale(1.02);
     }
 
-    /* Veri Bölümleri */
+    /* Veri Kartları */
     .data-card {
         background: #ffffff;
         border: 1px solid #e4e4e7;
@@ -95,6 +96,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .card-header-custom h5 {
@@ -105,7 +108,6 @@
         gap: 12px;
     }
 
-    /* Tablo Düzeni */
     .table-responsive {
         max-height: 400px;
         overflow-y: auto;
@@ -119,6 +121,9 @@
         letter-spacing: 1px;
         color: #71717a;
         padding: 15px 30px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 
     .table td {
@@ -128,7 +133,6 @@
         font-size: 0.95rem;
     }
 
-    /* Paragraf Bloğu */
     .para-item {
         padding: 20px 30px;
         border-bottom: 1px solid #f4f4f5;
@@ -147,7 +151,6 @@
         font-weight: 700;
     }
 
-    /* Scrollbar */
     .table-responsive::-webkit-scrollbar { width: 6px; }
     .table-responsive::-webkit-scrollbar-thumb { background: #e4e4e7; border-radius: 10px; }
 </style>
@@ -159,14 +162,12 @@
         <p class="text-muted fs-5">Web sayfalarını analiz edin, verileri profesyonelce ayıklayın.</p>
     </div>
 
-    <div class="search-wrapper">
-        <input type="url" name="url" placeholder="Analiz edilecek URL'yi yapıştırın (https://...)" required form="mainForm">
-        <button type="submit" form="mainForm">Verileri Çek</button>
-    </div>
-
-    <form id="mainForm" method="post" style="display: none;">
+    <form id="mainForm" method="post" action=".">
         {% csrf_token %}
-        <input type="hidden" name="url" id="targetUrl">
+        <div class="search-wrapper">
+            <input type="url" name="url" id="urlInput" placeholder="Analiz edilecek URL'yi yapıştırın (https://...)" required value="{{ url|default:'' }}">
+            <button type="submit">Verileri Çek</button>
+        </div>
     </form>
 
     {% if veri %}
@@ -199,7 +200,7 @@
     <div class="data-card">
         <div class="card-header-custom">
             <h5><i class="bi bi-link-45deg text-success"></i> Ayıklanan Linkler</h5>
-            <span class="badge-count">{{ veri.linkler|length }} BAŞLIK</span>
+            <span class="badge-count">{{ veri.linkler|length }} ADRES</span>
         </div>
         <div class="table-responsive">
             <table class="table mb-0">
@@ -219,6 +220,10 @@
                             <a href="{{ item }}" target="_blank" class="btn btn-sm btn-light border rounded-pill px-3">Ziyaret Et</a>
                         </td>
                     </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-4">Link bulunamadı.</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -230,9 +235,11 @@
             <h5><i class="bi bi-text-paragraph text-warning"></i> Metin İçerikleri</h5>
             <div class="d-flex align-items-center gap-3">
                 <span class="badge-count">{{ veri.paragraflar|length }} BLOK</span>
-                <a href="/scraping-csv/?url={{url}}" class="btn btn-dark btn-sm rounded-pill px-4">
+                {% if url %}
+                <a href="/scraping-csv/?url={{ url|urlencode }}" class="btn btn-dark btn-sm rounded-pill px-4">
                     <i class="bi bi-download me-2"></i>CSV İNDİR
                 </a>
+                {% endif %}
             </div>
         </div>
         <div class="table-responsive">
@@ -241,6 +248,8 @@
                 <span class="text-muted small d-block mb-1">Blok #{{ forloop.counter }}</span>
                 <span class="small">{{ item }}</span>
             </div>
+            {% empty %}
+            <div class="para-item text-center text-muted">Metin içeriği bulunamadı.</div>
             {% endfor %}
         </div>
     </div>
@@ -248,24 +257,8 @@
     {% endif %}
 
     <footer class="text-center mt-5 mb-5">
-        <p class="text-muted small">Web Scraping PythonTürkçe</p>
+        <p class="text-muted small">Web Scraping PythonTürkçe &copy; 2024</p>
     </footer>
 
 </div>
-
-<script>
-    // Giriş kutusundaki veriyi gizli forma aktarır
-    const input = document.querySelector('.search-wrapper input');
-    const hiddenInput = document.getElementById('targetUrl');
-    
-    input.addEventListener('input', (e) => {
-        hiddenInput.value = e.target.value;
-    });
-
-    // Sayfa yüklendiğinde eğer url varsa inputa yaz (opsiyonel)
-    {% if url %}
-    input.value = "{{ url }}";
-    hiddenInput.value = "{{ url }}";
-    {% endif %}
-</script>
 {% endblock %}
